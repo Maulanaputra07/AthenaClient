@@ -1,7 +1,8 @@
 import React from 'react'
 import '../App.css'
 import Navbar from '../components/navbar'
-import { GraduationCap, IdentificationCard,MapPin,CalendarDots } from '@phosphor-icons/react';
+import sprator from '../assets/sprator.svg'
+import { GraduationCap, IdentificationCard,MapPin,CalendarDots, DeviceMobile, UserCircle } from '@phosphor-icons/react';
 // import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 
 function Form() {
@@ -12,17 +13,21 @@ function Form() {
   // };
 
   return (
-    <div className='p-[2rem]'>
-      <Navbar/>
-      <h1 className="text-3xl font-bold mb-5 text-center">
-        Selamat datang pada website Athena
-      </h1>
-      <h3 className="text-xl font-semibold mb-5 text-center">
-        Form pendaftaran
-      </h3>
+    <div className=''>
+      <div className='header p-[2rem] relative'>
+        <Navbar/>
+        <div className='p-14 w-full flex flex-col items-center justify-center'>
+          <h1 className="text-3xl text-white max-w-lg font-bold mb-5 text-center">
+            Selamat datang pada website PPDB SMKTH
+          </h1>
+          <h3 className="text-xl font-semibold pt-24 text-center text-white">
+            Form pendaftaran
+          </h3>
+        </div>
+      </div>
       <div className='gap-5 flex flex-col w-full items-center justify-center'>
-        <div class="w-full max-w-xl">
-          <form class="shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="w-full max-w-4xl">
+          <form class="shadow-md relative top-[-80px] bg-white rounded px-12 pt-10 pb-12 mb-4">
             {/* Nama */}
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-semibold mb-2" for="username">
@@ -129,7 +134,7 @@ function Form() {
               </label>
               <div className="input-group flex items-center justify-center">
                 <span className='p-1.5 rounded-tl-md border-t-2 border-l-2 border-b-2 rounded-bl-md bg-white shadow-bottom-only'>
-                <MapPin size={24} color='grey' />
+                <DeviceMobile size={24} color='grey' />
                 </span>
                 <input class="w-full border-t-2 border-r-2 border-b-2 py-2 bg-white shadow-bottom-only rounded-tr-md rounded-br-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="teks" placeholder="No telp/WA calon peserta didik"/>
               </div>
@@ -141,7 +146,7 @@ function Form() {
               </label>
               <div className="input-group flex items-center justify-center">
                 <span className='p-1.5 rounded-tl-md border-t-2 border-l-2 border-b-2 rounded-bl-md bg-white shadow-bottom-only'>
-                <MapPin size={24} color='grey' />
+                <DeviceMobile size={24} color='grey' />
                 </span>
                 <input class="w-full border-t-2 border-r-2 border-b-2 py-2 bg-white shadow-bottom-only rounded-tr-md rounded-br-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="teks" placeholder="No telp/WA orang tua"/>
               </div>
@@ -153,7 +158,7 @@ function Form() {
               </label>
               <div className="input-group flex items-center justify-center">
                 <span className='p-1.5 rounded-tl-md border-t-2 border-l-2 border-b-2 rounded-bl-md bg-white shadow-bottom-only'>
-                <MapPin size={24} color='grey' />
+                <UserCircle size={24} color='grey' />
                 </span>
                 <input class="w-full border-t-2 border-r-2 border-b-2 py-2 bg-white shadow-bottom-only rounded-tr-md rounded-br-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="teks" placeholder="Nama ayah kandung"/>
               </div>
@@ -165,7 +170,7 @@ function Form() {
               </label>
               <div className="input-group flex items-center justify-center">
                 <span className='p-1.5 rounded-tl-md border-t-2 border-l-2 border-b-2 rounded-bl-md bg-white shadow-bottom-only'>
-                <MapPin size={24} color='grey' />
+                <UserCircle size={24} color='grey' />
                 </span>
                 <input class="w-full border-t-2 border-r-2 border-b-2 py-2 bg-white shadow-bottom-only rounded-tr-md rounded-br-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="teks" placeholder="Nama ibu kandung"/>
               </div>
@@ -177,7 +182,7 @@ function Form() {
               </label>
               <div className="input-group flex items-center justify-center">
                 <span className='p-1.5 rounded-tl-md border-t-2 border-l-2 border-b-2 rounded-bl-md bg-white shadow-bottom-only'>
-                <MapPin size={24} color='grey' />
+                <UserCircle size={24} color='grey' />
                 </span>
                 <input class="w-full border-t-2 border-r-2 border-b-2 py-2 bg-white shadow-bottom-only rounded-tr-md rounded-br-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="teks" placeholder="Pekerjaan ayah"/>
               </div>
@@ -189,7 +194,7 @@ function Form() {
               </label>
               <div className="input-group flex items-center justify-center">
                 <span className='p-1.5 rounded-tl-md border-t-2 border-l-2 border-b-2 rounded-bl-md bg-white shadow-bottom-only'>
-                <MapPin size={24} color='grey' />
+                <UserCircle size={24} color='grey' />
                 </span>
                 <input class="w-full border-t-2 border-r-2 border-b-2 py-2 bg-white shadow-bottom-only rounded-tr-md rounded-br-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="teks" placeholder="Pekerjaan ibu"/>
               </div>
