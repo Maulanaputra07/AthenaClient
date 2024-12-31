@@ -4,14 +4,14 @@ function Navbar(){
     return(
         <>
             <div className="flex justify-between">
-                <div className="title text-lg font-semibold text-white ">
-                    <a href="" className="flex items-center">
+                <div className="title text-lg font-semibold text-white text-opacity-75">
+                    <a href="" className="flex gap-1 items-center">
                         <img src="https://ppdb.smkthpati.sch.id/img/logo.png" alt="" className="w-10"/>
                         PPDB SMKTH
                     </a>
                 </div>
                 <div>
-                    <input placeholder="Cari nik" className="border shadow-md border-gray-100 text-black px-3 py-2 rounded"/>
+                    {/* <input placeholder="Cari nik" className="border shadow-md border-gray-100 text-black px-3 py-2 rounded"/> */}
                 </div>
             </div>
         </>

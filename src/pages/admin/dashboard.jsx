@@ -1,5 +1,5 @@
 import React from "react"
-import Sidebar, {SidebarItem} from "../../components/sidebar"
+import Sidebar, {SidebarItem} from "../../components/Sidebar"
 import '../../App.css'
 import { Outlet } from "react-router-dom"
 
