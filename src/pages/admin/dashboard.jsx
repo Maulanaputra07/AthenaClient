@@ -7,10 +7,11 @@ function Dashboard(){
     return(
         <div className="flex">
             <Sidebar>
-                <SidebarItem text="Dashboard" to="/"/> {/* Contoh icon */}
-                <SidebarItem text="Profile" to="profile"/>
+                <SidebarItem text="Dashboard" to="/admin"/> {/* Contoh icon */}
+                <SidebarItem text="Profile" to="/profile"/>
+                <SidebarItem text="Logout" to="/admin/login"/>
             </Sidebar>
-            <div className="content h-screen overflow-y-auto p-4">
+            <div className="content h-screen overflow-y-auto bg-white w-full p-4">
                 <Outlet/>
             </div>
         </div>

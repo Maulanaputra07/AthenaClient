@@ -1,27 +1,29 @@
 import {useState } from "react"
 import { NavLink } from "react-router-dom";
+import athenaIcon from '../assets/athenaicon.png'
 
 export default function Sidebar({ children }) {
     const [expanded, setExpanded] = useState(true)
     return(
         <aside className="h-screen max-w-xs">
-            <nav className="h-full flex flex-col bg-orange-500 border-r shadow-sm">
+            <nav className="h-full flex flex-col justify-center items-center bg-[#FFAA17] border-r shadow-sm">
                 <div className="p-4 pb-2 flex justify-between items-center">
                     {/* <img src="" alt="" /> */}
-                    <button onClick={()=> setExpanded(curr =>!curr)} className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
-                        {/* icon chevron */}
-                    </button>
+                    {/* <button onClick={()=> setExpanded(curr =>!curr)} className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
+                        icon chevron
+                    </button> */}
                 </div>
 
-                <ul className="flex-1 px-3">{children}</ul>
+                <ul className="flex flex-col justify-center items-center h-full px-3">{children}</ul>
 
-                <div className="border-t flex p-3">
+                <div className="border-t w-full border-[#F1F1F1] flex bg-[#F1F1F1] p-3">
                     {/* <img src="" alt="" /> */}
-                    <div className={`flex justify-between items-center w-52 ml-3`}>
-                        <div>
-                            <h4 className="font-semibold">Athena</h4>
-                            <span className="text-sm text-gray-600">SMK TUNAS HARAPAN PATI</span>
+                    <div className="flex flex-col items-center">
+                        <div className={`flex items-end w-52 ml-3`}>
+                            <img src={athenaIcon} width={50} alt="" />
+                            <h4 className="font-semibold">thena</h4>
                         </div>
+                        <h5>SMK TUNAS HARAPAN PATI</h5>
                     </div>
                 </div>
             </nav>
