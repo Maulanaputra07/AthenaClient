@@ -7,11 +7,9 @@ export default {
   ],
   theme: {
     extend: {
-      extend:{
-        boxShadow: {
-          'bottom-only': '0px 4px 6px rgba(0, 0, 0, 0.5)'
-        }
-      }
+      backgroundImage: {
+        'white-yellow': 'linear-gradient(146deg, #FFFFFF 15%, #FFAA17 100%)',
+      },
     },
   },
   plugins: [
