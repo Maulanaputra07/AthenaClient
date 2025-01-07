@@ -2,9 +2,9 @@ import React from "react";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import FormAthena from "./pages/form";
-import Dashboard from "./pages/admin/Dashboard";
+import Dashboard from "./pages/admin/dashboard";
 import Login from "./pages/admin/login";
-import Profile from "./pages/admin/Profile";
+import Siswa from "./pages/admin/Siswa";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/admin/home";
 // import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
@@ -23,7 +23,7 @@ function App() {
         <Route path="/admin" element={<Dashboard />}>
           <Route index element={<Home />} />
           {/* <Route path='settings' element={<Setting/>}/> */}
-          <Route path="profile" element={<Profile />} />
+          <Route path='siswa' element={<Siswa />} />
         </Route>
         <Route path="/admin/login" element={<Login />} />
       </Routes>
