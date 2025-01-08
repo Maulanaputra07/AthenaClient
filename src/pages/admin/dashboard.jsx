@@ -8,7 +8,7 @@ function Dashboard(){
         <div className="flex">
             <Sidebar>
                 <SidebarItem text="Dashboard" to="/admin"/> {/* Contoh icon */}
-                <SidebarItem text="Profile" to="/profile"/>
+                <SidebarItem text="Siswa" to="siswa"/>
                 <SidebarItem text="Logout" to="/admin/login"/>
             </Sidebar>
             <div className="content h-screen overflow-y-auto bg-white w-full p-4">
