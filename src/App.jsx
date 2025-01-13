@@ -5,29 +5,32 @@ import FormAthena from "./pages/form";
 import Dashboard from "./pages/admin/dashboard";
 import Login from "./pages/admin/login";
 import Siswa from "./pages/admin/Siswa";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import Home from "./pages/admin/home";
-// import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
-
+import { AuthProvider } from "./config/Provider";
+import { AuthGuard } from "./config/Guard";
 function App() {
-  // const handleChange = (e) => {
-  //   // Hanya ambil angka dan tambahkan format
-  //   const formattedValue = e.target.value.replace(/[^0-9]/g, "");
-  //   setValue(formattedValue);
-  // };
-
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<FormAthena />} />
-        <Route path="/admin" element={<Dashboard />}>
-          <Route index element={<Home />} />
-          {/* <Route path='settings' element={<Setting/>}/> */}
-          <Route path='siswa' element={<Siswa />} />
-        </Route>
-        <Route path="/admin/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<FormAthena />} />
+          <Route
+            path="/admin"
+            element={
+              <AuthGuard>
+                <Dashboard />
+              </AuthGuard>
+            }
+          >
+            <Route index element={<Home />} />
+
+            <Route path="siswa" element={<Siswa />} />
+          </Route>
+          <Route path="/admin/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

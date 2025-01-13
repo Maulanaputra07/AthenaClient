@@ -21,7 +21,7 @@ export default function Sidebar({ children }) {
                     <div className="flex flex-col items-center">
                         <div className={`flex items-end w-52 ml-3`}>
                             <img src={athenaIcon} width={50} alt="" />
-                            <h4 className="font-semibold">thena</h4>
+                            <h4 className="font-semibold text-2xl">thena</h4>
                         </div>
                         <h5>SMK TUNAS HARAPAN PATI</h5>
                     </div>
