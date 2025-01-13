@@ -30,7 +30,8 @@ function Login() {
   }
 
   useEffect(() => {
-    if (auth) {
+    const token = localStorage.getItem("token");
+    if (token) {
       return navigate("/admin");
     }
   }, []);

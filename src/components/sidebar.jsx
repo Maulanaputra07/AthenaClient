@@ -31,7 +31,7 @@ export default function Sidebar({ children }) {
     )
 }
 
-export function SidebarItem({ icon, text, active, alert, to, next }) {
+export function SidebarItem({ icon, text, active, alert, to, next, onClick }) {
     return (
         <li>
             <NavLink to={to} className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors ${

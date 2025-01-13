@@ -6,7 +6,7 @@ import Dashboard from "./pages/admin/dashboard";
 import Login from "./pages/admin/login";
 import Siswa from "./pages/admin/Siswa";
 import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
-import Home from "./pages/admin/home";
+import Home from "./pages/admin/Home";
 import { AuthProvider } from "./config/Provider";
 import { AuthGuard } from "./config/Guard";
 function App() {
