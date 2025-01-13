@@ -28,6 +28,13 @@ function Form() {
   const [asalSekolah, setAsalSekolah] = useState();
   const [jenisKelamin, setJenisKelamin] = useState();
   const [agama, setAgama] = useState();
+  const [formData, setFormData] = useState({
+    nama: "",
+    nisn: "",
+    nik: "",
+    tempatLahir: "",
+    taggalLahir: new Date().getDate,
+  })
 
   const handleChangeJenisKelamin = (e) => {
     setJenisKelamin(e.target.value);
@@ -514,7 +521,6 @@ function Form() {
                     Back
                   </button>
                   <button
-                    onClick={nextStep}
                     className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     type="button"
                   >
