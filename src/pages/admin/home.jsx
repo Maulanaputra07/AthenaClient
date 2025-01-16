@@ -39,10 +39,12 @@ export default function Home() {
   }, []);
   return (
     <>
+    <div className="ml-10">
       <h1 className="text-2xl">Selamat Datang, Admin</h1>
       <p>Ini adalah halaman Dashboard!</p>
+    </div>
 
-      <div className="grid grid-cols-3 gap-3 py-4">
+      <div className="md:grid md:grid-cols-3 gap-5 py-4 flex flex-col max-w-max">
         {load ? (
           <>Loading...</>
         ) : (
