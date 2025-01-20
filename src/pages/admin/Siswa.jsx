@@ -221,15 +221,15 @@ export default function Siswa() {
   return (
     <div>
       <div className="flex justify-between items-center">
-        <h1 className="ml-10 pb-3">Halaman siswa</h1>
-        <button onClick={() => setShowPopup(!showPopup)} className="bg-green-400 p-2 m-2 rounded-md">Tambah siswa</button>
+        <h1 className="ml-10 pb-3 md:mt-2 mt-4 text-lg font-semibold">Halaman siswa</h1>
+        {/* <button onClick={() => setShowPopup(!showPopup)} className="bg-green-400 p-2 m-2 rounded-md">Tambah siswa</button> */}
       </div>
 
       <div className="table-container w-full overflow-x-auto">
         {load ? (
           <>Loading...</>
         ) : (
-          <table className="border-collapse border min-w-full">
+          <table className="border-collapse border min-w-full mt-5">
             <thead>
               <tr>
                 <th
@@ -288,6 +288,9 @@ export default function Siswa() {
                 </th>
                 <th className="border border-main_dark bg-gray">
                   Jurusan
+                </th>
+                <th className="border border-main_dark bg-white sticky right-0 z-10">
+                  Action
                 </th>
               </tr>
             </thead>
@@ -352,6 +355,9 @@ export default function Siswa() {
                     <td className="border border-main_dark whitespace-nowrap px-3">
                       {siswa.jurusan}
                     </td>
+                    <td className="border border-main_dark whitespace-nowrap bg-white px-3 sticky right-0">
+                      <button onClick={() => setShowPopup(!showPopup)} className="bg-orange-400 p-2 m-1 rounded-md">Edit</button>
+                    </td>
                   </tr>
                 ))}
             </tbody>
@@ -364,8 +370,8 @@ export default function Siswa() {
 
         <div className="fixed inset-0 bg-black/50 backdrop:blur-sm z-10"></div>
 
-        <div className="absolute z-20 top-0 m-5 md:right-[25%] left-0 md:w-[50%] w-[90%] h-[86%] bg-white rounded-md shadow-md">
-          <h1 className="p-3 font-semibold">ADD SISWA</h1>
+        <div className="absolute z-20 top-0 m-5 md:right-[25%] left-0 md:left-[25%] md:w-[50%] w-[90%] h-[86%] bg-white rounded-md shadow-md">
+          <h1 className="p-3 font-semibold">EDIT SISWA</h1>
           <div className="flex flex-col justify-between px-4">
               <div>
                 <form>
@@ -886,7 +892,7 @@ export default function Siswa() {
                   </div>
                   <div className="flex w-full justify-between">
                       <button onClick={() => setShowPopup(!showPopup)} className="p-3 text-b rounded-md  bg-white hover:bg-[#F1F1F1] text-[#5e72e4]">Kembali</button>
-                      <button onClick={() => setShowPopup(!showPopup)} className="p-3 text-b rounded-md bg-[#5e72e4] hover:bg-blue-700 text-white">Daftar</button>
+                      <button onClick={() => setShowPopup(!showPopup)} className="p-3 text-b rounded-md bg-[#5e72e4] hover:bg-blue-700 text-white">Simpan</button>
                   </div>
                 </form>
               </div>
