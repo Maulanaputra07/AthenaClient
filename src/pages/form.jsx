@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../App.css";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar";
 import sprator from "../assets/sprator.svg";
 import {
   GraduationCap,
@@ -28,17 +28,17 @@ function Form() {
   function handleChange(e) {
     setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
   }
-  
+
   const handleSelect = (item) => {
     console.log(item);
     setSelectedSekolah(item);
     setIsOpen(false);
-  }
+  };
 
   const handleSearch = (e) => {
     console.log(e.target.value);
     setSerach(e.target.value);
-  }
+  };
 
   const [step, setStep] = useState(1);
 
@@ -59,34 +59,37 @@ function Form() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if(dropdownRef.current && !dropdownRef.current.contains(event.target) && searchRef.current && !searchRef.current.contains(event.target)){
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        searchRef.current &&
+        !searchRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
 
-
     const fetchData = async () => {
-      let url = "https://api-sekolah-indonesia.vercel.app/sekolah/smp?kab_kota=031800&page=1&perPage=30"
-  
+      let url =
+        "https://api-sekolah-indonesia.vercel.app/sekolah/smp?kab_kota=031800&page=1&perPage=30";
+
       if (search.trim()) {
         url = `https://api-sekolah-indonesia.vercel.app/sekolah/s?sekolah=${search}`;
       }
-      
-      try{
-        const res = await axios.get(url)
+
+      try {
+        const res = await axios.get(url);
         setAsalSekolah(res.data.dataSekolah);
 
         beaxios.get("/jurusans").then((res) => {
-            setJurusans(res.data.data);
-          });
-      } catch (err) {
-
-      }
+          setJurusans(res.data.data);
+        });
+      } catch (err) {}
     };
-    
-    fetchData();   
+
+    fetchData();
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -551,34 +554,38 @@ function Form() {
                       Asal sekolah (SMP/MTs)
                     </p>
                     <div className="input-group flex items-center justify-center">
-                      <div className="relative w-full border rounded shadow p-2 text-sm cursor-pointer"
-                        onClick={()=> setIsOpen(true)}
+                      <div
+                        className="relative w-full border rounded shadow p-2 text-sm cursor-pointer"
+                        onClick={() => setIsOpen(true)}
                         ref={searchRef}
-                        >
-                        { selectedSekolah || "Pilih sekolah"}
+                      >
+                        {selectedSekolah || "Pilih sekolah"}
                       </div>
 
-                        {isOpen && (
-                          <div className="absolute bg-white top-12 border rounded shadow mt-1 w-[95%] max-h-64 overflow-y-auto z-10" ref={dropdownRef}>
-                              <input
-                                type="text"
-                                placeholder="Cari sekolah..."
-                                className="w-full border-b p-2 text-sm"
-                                onChange={handleSearch}
-                                value={search}
-                              />
-                              {asalSekolah &&
-                                asalSekolah.map((item, i) => (
-                                  <div
-                                  key={i}
-                                  className="p-2 text-sm hover:bg-gray-100 cursor-pointer"
-                                  onClick={() => handleSelect(item.sekolah)}
-                                >
-                                  {item.sekolah}
-                                </div>
+                      {isOpen && (
+                        <div
+                          className="absolute bg-white top-12 border rounded shadow mt-1 w-[95%] max-h-64 overflow-y-auto z-10"
+                          ref={dropdownRef}
+                        >
+                          <input
+                            type="text"
+                            placeholder="Cari sekolah..."
+                            className="w-full border-b p-2 text-sm"
+                            onChange={handleSearch}
+                            value={search}
+                          />
+                          {asalSekolah &&
+                            asalSekolah.map((item, i) => (
+                              <div
+                                key={i}
+                                className="p-2 text-sm hover:bg-gray-100 cursor-pointer"
+                                onClick={() => handleSelect(item.sekolah)}
+                              >
+                                {item.sekolah}
+                              </div>
                             ))}
-                          </div>
-                        )}
+                        </div>
+                      )}
                     </div>
                   </div>
                   {/* Jurusan */}

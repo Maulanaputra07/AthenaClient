@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import QrScanner from "react-qr-scanner";
+import { useAxios } from "../../config/hooks";
 
 const QRCodeScanner = () => {
   const [scanResult, setScanResult] = useState("");
 
+  const beaxios = useAxios();
+
+
   const handleScan = (result) => {
+
+    
     if (result) {
+      beaxios.post(`/siswa/${result.text}`).then(res => {
+        Sw
+      })  
       setScanResult(result.text); // Get the scanned QR code text
     }
   };
