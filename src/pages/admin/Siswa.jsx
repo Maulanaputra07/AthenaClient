@@ -187,6 +187,10 @@ export default function Siswa() {
     setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
   }
 
+  function handleDeleteSiswa(e){
+    console.log("Delete");
+  }
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if(dropdownRef.current && !dropdownRef.current.contains(event.target) && searchRef.current && !searchRef.current.contains(event.target)){
@@ -357,6 +361,7 @@ export default function Siswa() {
                     </td>
                     <td className="border border-main_dark whitespace-nowrap bg-white px-3 sticky right-0">
                       <button onClick={() => setShowPopup(!showPopup)} className="bg-orange-400 p-2 m-1 rounded-md">Edit</button>
+                      <button onClick={handleDeleteSiswa} className="bg-red p-2 m-1 rounded-md">Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -375,7 +380,7 @@ export default function Siswa() {
           <div className="flex flex-col justify-between px-4">
               <div>
                 <form>
-                  <div className="h-96 overflow-y-auto bg-white p-6 mb-4">
+                  <div className="h-auto overflow-y-auto bg-white p-6 mb-4">
                     <div className="step1 flex flex-col justify-between">
                       <div>
                         {/* Nama */}

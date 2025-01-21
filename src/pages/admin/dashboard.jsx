@@ -42,6 +42,12 @@ function Dashboard() {
           active={location.includes("/siswa")}
           to="siswa"
         />
+        <SidebarItem
+          text="Scan"
+          name="Scan"
+          active={location.includes("/scan")}
+          to="scan"
+        />
         {/* <SidebarItem text="Logout" onClick={handleLogout} /> */}
         <li className="ml-36 md:ml-0">
           <button

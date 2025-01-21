@@ -49,7 +49,7 @@ export default function Home() {
           <>Loading...</>
         ) : (
           <>
-            <div className="flex gap-3">
+            <div className="flex w-full gap-5">
               <Card title="Total Jumlah Pendaftar" digit={pendaftar.all} />
               <Card title="Pendaftar Hari ini" digit={pendaftar.today} />
             </div>
