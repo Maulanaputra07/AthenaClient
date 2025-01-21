@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../App.css";
 import Navbar from "../components/Navbar";
 import sprator from "../assets/sprator.svg";
@@ -11,25 +11,33 @@ import {
   UserCircle,
 } from "@phosphor-icons/react";
 
-import {
-  Menu,
-  MenuHandler,
-  Button,
-  MenuList,
-  MenuItem,
-  Input,
-} from "@material-tailwind/react";
-
 import axios from "axios";
 import { useAxios } from "../config/hooks";
+import { data } from "autoprefixer";
 
 function Form() {
-  const [asalSekolah, setAsalSekolah] = useState();
+  const [asalSekolah, setAsalSekolah] = useState([]);
+  const [selectedSekolah, setSelectedSekolah] = useState("");
+  const [search, setSerach] = useState("");
   const [jurusans, setJurusans] = useState();
   const [dataSiswa, setDataSiswa] = useState();
+  const [isOpen, setIsOpen] = useState(false);
+  const searchRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   function handleChange(e) {
     setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
+  }
+  
+  const handleSelect = (item) => {
+    console.log(item);
+    setSelectedSekolah(item);
+    setIsOpen(false);
+  }
+
+  const handleSearch = (e) => {
+    console.log(e.target.value);
+    setSerach(e.target.value);
   }
 
   const [step, setStep] = useState(1);
@@ -50,21 +58,41 @@ function Form() {
   const beaxios = useAxios();
 
   useEffect(() => {
-    axios
-      .get(
-        "https://api-sekolah-indonesia.vercel.app/sekolah/smp?kab_kota=031800&page=1&perPage=30"
-      )
-      .then((res) => {
-        setAsalSekolah(res.data.dataSekolah);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const handleClickOutside = (event) => {
+      if(dropdownRef.current && !dropdownRef.current.contains(event.target) && searchRef.current && !searchRef.current.contains(event.target)){
+        setIsOpen(false);
+      }
+    };
 
-    beaxios.get("/jurusans").then((res) => {
-      setJurusans(res.data.data);
-    });
-  }, []);
+    document.addEventListener("mousedown", handleClickOutside);
+
+
+    const fetchData = async () => {
+      let url = "https://api-sekolah-indonesia.vercel.app/sekolah/smp?kab_kota=031800&page=1&perPage=30"
+  
+      if (search.trim()) {
+        url = `https://api-sekolah-indonesia.vercel.app/sekolah/s?sekolah=${search}`;
+      }
+      
+      try{
+        const res = await axios.get(url)
+        setAsalSekolah(res.data.dataSekolah);
+
+        beaxios.get("/jurusans").then((res) => {
+            setJurusans(res.data.data);
+          });
+      } catch (err) {
+
+      }
+    };
+    
+    fetchData();   
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [search]);
+
+  // console.log(dataSiswa?.asalSekolah);
   return (
     <div className="bg-[#162c4d] min-h-screen">
       <div className="header p-5 relative">
@@ -516,43 +544,41 @@ function Form() {
                 <div>
                   {/* Asal smp/mts */}
                   <div className="mb-4">
-                    <label
+                    <p
                       className="block text-gray-700 text-sm font-semibold mb-2"
                       htmlFor="asalSekolah"
                     >
                       Asal sekolah (SMP/MTs)
-                    </label>
+                    </p>
                     <div className="input-group flex items-center justify-center">
-                      <Menu
-                        dismiss={{
-                          itemPress: false,
-                        }}
-                      >
-                        <MenuHandler>
-                          <Button className="text-black rounded-tr-md rounded-br-md w-full border-t-2 border-r-2 border-b-2 py-3 px-3 bg-white text-start font-semibold">
-                            Pilih sekolah
-                          </Button>
-                        </MenuHandler>
-                        <MenuList
-                          className="md:w-[67%] bg-white max-h-64 w-[80%] overflow-auto"
-                          name="asal_sekolah"
-                          value={dataSiswa?.asal_sekolah}
-                          onChange={handleChange}
+                      <div className="relative w-full border rounded shadow p-2 text-sm cursor-pointer"
+                        onClick={()=> setIsOpen(true)}
+                        ref={searchRef}
                         >
-                          <Input
-                            containerProps={{
-                              className: "mb-4",
-                            }}
-                            placeholder="Cari sekolah"
-                            className="p-2"
-                            autoFocus
-                          />
-                          {asalSekolah &&
-                            asalSekolah.map((item, i) => (
-                              <MenuItem>{item.sekolah}</MenuItem>
+                        { selectedSekolah || "Pilih sekolah"}
+                      </div>
+
+                        {isOpen && (
+                          <div className="absolute bg-white top-12 border rounded shadow mt-1 w-[95%] max-h-64 overflow-y-auto z-10" ref={dropdownRef}>
+                              <input
+                                type="text"
+                                placeholder="Cari sekolah..."
+                                className="w-full border-b p-2 text-sm"
+                                onChange={handleSearch}
+                                value={search}
+                              />
+                              {asalSekolah &&
+                                asalSekolah.map((item, i) => (
+                                  <div
+                                  key={i}
+                                  className="p-2 text-sm hover:bg-gray-100 cursor-pointer"
+                                  onClick={() => handleSelect(item.sekolah)}
+                                >
+                                  {item.sekolah}
+                                </div>
                             ))}
-                        </MenuList>
-                      </Menu>
+                          </div>
+                        )}
                     </div>
                   </div>
                   {/* Jurusan */}

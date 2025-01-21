@@ -43,12 +43,12 @@ function Dashboard() {
           to="siswa"
         />
         {/* <SidebarItem text="Logout" onClick={handleLogout} /> */}
-        <li>
+        <li className="ml-36 md:ml-0">
           <button
             onClick={handleLogout}
             className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors ${"text-left hover:bg-indigo-50 text-gray-600"}`}
           >
-            <span className="w-52 ml-3">Logout</span>
+            <span className="md:w-52 w-24 ml-3">Logout</span>
           </button>
         </li>
       </Sidebar>

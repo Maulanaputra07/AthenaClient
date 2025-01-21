@@ -1,6 +1,6 @@
 export const CardTable = ({ title, data }) => {
   return (
-      <div className="flex flex-col justify-stretch border  rounded overflow-hidden">
+      <div className="flex flex-col justify-stretch border rounded overflow-hidden">
         <div className="header-card bg-main_dark text-white px-4 py-2">
           {title}
         </div>
