@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../App.css";
-import Navbar from "../components/navbar";
 import sprator from "../assets/sprator.svg";
 import {
   GraduationCap,
@@ -14,14 +13,22 @@ import {
 import axios from "axios";
 import { useAxios } from "../config/hooks";
 import { data } from "autoprefixer";
+import Swal from "sweetalert2";
+import Navbar from "../components/navbar";
 
 function Form() {
   const [asalSekolah, setAsalSekolah] = useState([]);
   const [selectedSekolah, setSelectedSekolah] = useState("");
-  const [search, setSerach] = useState("");
+  const [search, setSearch] = useState("");
   const [jurusans, setJurusans] = useState();
-  const [dataSiswa, setDataSiswa] = useState();
+  const [dataSiswa, setDataSiswa] = useState({
+    jenis_kelamin: true,
+    agama: "Islam",
+    jurusan_id: 1,
+  });
+  const [errors, setErrors] = useState();
   const [isOpen, setIsOpen] = useState(false);
+  const [load, setLoad] = useState(false);
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
 
@@ -30,25 +37,72 @@ function Form() {
   }
 
   const handleSelect = (item) => {
-    console.log(item);
     setSelectedSekolah(item);
+    setDataSiswa({ ...dataSiswa, asal_sekolah: item });
     setIsOpen(false);
   };
 
   const handleSearch = (e) => {
-    console.log(e.target.value);
-    setSerach(e.target.value);
+    setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
+    setSearch(e.target.value);
   };
 
   const [step, setStep] = useState(1);
 
   function handleSubmit(e) {
-    console.log(e);
+    e.preventDefault();
+    if (step === 5) {
+      setLoad(true);
+      beaxios
+        .post("/siswa", dataSiswa)
+        .then((res) => {
+          Swal.fire({
+            title: "Berhasil Terdaftar!",
+            icon: "success",
+          }).then(() => {
+            window.location.reload();
+          });
+        })
+        .catch((err) => {
+          // console.log(err.response.data.errors);
+          setErrors(err.response?.data.errors);
+          const resErr = err.response.data.errors;
+          if (resErr?.name || resErr?.nik || resErr?.nisn) {
+            setStep(1);
+          } else if (
+            resErr?.tempat_lahir ||
+            resErr?.tanggal_lahir ||
+            resErr?.jenis_kelamin
+          ) {
+            setStep(2);
+          } else if (
+            resErr?.agama ||
+            resErr?.alamat_lengkap ||
+            resErr?.no_telepon ||
+            resErr?.no_telepon_ortu
+          ) {
+            setStep(3);
+          } else if (
+            resErr?.nama_ayah ||
+            resErr?.nama_ibu ||
+            resErr?.pekerjaan_ayah ||
+            resErr?.pekerjaan_ibu
+          ) {
+            setStep(4);
+          }
+        })
+        .finally(() => {
+          setLoad(false);
+        });
+    }
   }
 
   const nextStep = (e) => {
-    e.preventDefault();
-    setStep((prevStep) => prevStep + 1);
+    console.log(step);
+    if (step < 5) {
+      e.preventDefault();
+      setStep((prevStep) => prevStep + 1);
+    }
   };
 
   const prevStep = () => {
@@ -85,6 +139,7 @@ function Form() {
 
         beaxios.get("/jurusans").then((res) => {
           setJurusans(res.data.data);
+          setDataSiswa({ ...dataSiswa, ["jurusan_id"]: res.data.data[0].id });
         });
       } catch (err) {}
     };
@@ -98,6 +153,11 @@ function Form() {
   // console.log(dataSiswa?.asalSekolah);
   return (
     <div className="bg-[#162c4d] min-h-screen">
+      {load && (
+        <div className="fixed z-30 top-0 left-0 flex justify-center items-center w-screen h-screen bg-[rgba(0,0,0,0.5)]">
+          <h1 className="text-white">Loading ...</h1>
+        </div>
+      )}
       <div className="header p-5 relative">
         <Navbar />
         <div className="p-14 w-full flex flex-col items-center justify-center">
@@ -113,7 +173,7 @@ function Form() {
         <div className="w-11/12 max-w-4xl">
           <form
             className="shadow-md relative top-[-80px]  bg-white rounded p-6 mb-4"
-            onSubmit={nextStep}
+            onSubmit={handleSubmit}
           >
             {step === 1 && (
               <div className="step1 flex flex-col justify-between h-full">
@@ -136,10 +196,39 @@ function Form() {
                         name="name"
                         type="text"
                         placeholder="Nama"
-                        value={dataSiswa?.name}
+                        value={dataSiswa?.name ?? ""}
                         onChange={handleChange}
                       />
                     </div>
+                    {errors?.name && (
+                      <span className="text-red">{errors?.name}</span>
+                    )}
+                  </div>
+                  {/* NISN */}
+                  <div className="mb-4">
+                    <label
+                      className="block text-gray-700 text-sm font-semibold mb-2"
+                      htmlFor="NISN"
+                    >
+                      Email Address
+                    </label>
+                    <div className="input-group flex items-center justify-center">
+                      <span className="p-1.5 rounded-tl-md border-t-2 border-l-2 border-b-2 rounded-bl-md bg-white shadow-bottom-only">
+                        <IdentificationCard size={24} color="grey" />
+                      </span>
+                      <input
+                        className="w-full border-t-2 border-r-2 border-b-2 py-2 bg-white shadow-bottom-only rounded-tr-md rounded-br-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="email"
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={dataSiswa?.email ?? ""}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    {errors?.email && (
+                      <span className="text-red">{errors?.email}</span>
+                    )}
                   </div>
                   {/* NISN */}
                   <div className="mb-4">
@@ -160,10 +249,13 @@ function Form() {
                         type="text"
                         name="nisn"
                         placeholder="NISN"
-                        value={dataSiswa?.nisn}
+                        value={dataSiswa?.nisn ?? ""}
                         onChange={handleChange}
                       />
                     </div>
+                    {errors?.nisn && (
+                      <span className="text-red">{errors?.nisn}</span>
+                    )}
                   </div>
                   {/* nik */}
                   <div className="mb-4">
@@ -184,16 +276,20 @@ function Form() {
                         type="text"
                         placeholder="NIK"
                         name="nik"
-                        value={dataSiswa?.nik}
+                        value={dataSiswa?.nik ?? ""}
                         onChange={handleChange}
                       />
                     </div>
+                    {errors?.nik && (
+                      <span className="text-red">{errors?.nik}</span>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center justify-end pt-5">
                   <button
+                    onClick={nextStep}
                     className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    type="submit"
+                    type="button"
                   >
                     Next
                   </button>
@@ -221,10 +317,13 @@ function Form() {
                         type="text"
                         placeholder="Tempat Lahir"
                         name="tempat_lahir"
-                        value={dataSiswa?.tempat_lahir}
+                        value={dataSiswa?.tempat_lahir ?? ""}
                         onChange={handleChange}
                       />
                     </div>
+                    {errors?.tempat_lahir && (
+                      <span className="text-red">{errors?.tempat_lahir}</span>
+                    )}
                   </div>
                   {/* tanggal lahir */}
                   <div className="mb-4">
@@ -244,10 +343,13 @@ function Form() {
                         type="date"
                         placeholder="Tanggal Lahir"
                         name="tanggal_lahir"
-                        value={dataSiswa?.tanggal_lahir}
+                        value={dataSiswa?.tanggal_lahir ?? ""}
                         onChange={handleChange}
                       />
                     </div>
+                    {errors?.tanggal_lahir && (
+                      <span className="text-red">{errors?.tanggal_lahir}</span>
+                    )}
                   </div>
                   {/* jenis kelamin */}
                   <div className="mb-4">
@@ -259,30 +361,23 @@ function Form() {
                     </label>
                     <div className="input-group flex items-center justify-center">
                       <select
-                        value={dataSiswa?.jenis_kelamin}
+                        value={dataSiswa?.jenis_kelamin ?? 1}
                         onChange={handleChange}
                         name="jenis_kelamin"
                         className="w-full border-1 shadow p-2"
                         id="jenisKelamin"
                       >
-                        <option
-                          name=""
-                          id="1"
-                          value="laki-laki"
-                          className="text-sm"
-                        >
+                        <option name="" id="1" value={1} className="text-sm">
                           Laki-laki
                         </option>
-                        <option
-                          name=""
-                          id="0"
-                          value="perempuan"
-                          className="text-sm"
-                        >
+                        <option name="" id="0" value={0} className="text-sm">
                           Perempuan
                         </option>
                       </select>
                     </div>
+                    {errors?.jenis_kelamin && (
+                      <span className="text-red">{errors?.jenis_kelamin}</span>
+                    )}
                   </div>
                 </div>
 
@@ -316,7 +411,7 @@ function Form() {
                   </label>
                   <div className="input-group flex items-center justify-center">
                     <select
-                      value={dataSiswa?.agama}
+                      value={dataSiswa?.agama ?? "Islam"}
                       onChange={handleChange}
                       name="agama"
                       className="w-full border-1 rounded shadow p-2"
@@ -342,6 +437,9 @@ function Form() {
                       </option>
                     </select>
                   </div>
+                  {errors?.agama && (
+                    <span className="text-red">{errors?.agama}</span>
+                  )}
                 </div>
                 {/* alamat calon peserta */}
                 <div className="mb-4">
@@ -361,10 +459,13 @@ function Form() {
                       type="teks"
                       placeholder="Alamat lengkap"
                       name="alamat_lengkap"
-                      value={dataSiswa?.alamat_lengkap}
+                      value={dataSiswa?.alamat_lengkap ?? ""}
                       onChange={handleChange}
                     />
                   </div>
+                  {errors?.alamat_lengkap && (
+                    <span className="text-red">{errors?.alamat_lengkap}</span>
+                  )}
                 </div>
                 {/* no peserta */}
                 <div className="mb-4">
@@ -383,16 +484,19 @@ function Form() {
                       id="noTlp"
                       type="text"
                       name="no_telepon"
-                      value={dataSiswa?.no_telepon}
+                      value={dataSiswa?.no_telepon ?? ""}
                       onChange={handleChange}
                       placeholder="No telp/WA calon peserta didik"
                     />
                   </div>
+                  {errors?.no_telepon && (
+                    <span className="text-red">{errors?.no_telepon}</span>
+                  )}
                 </div>
                 {/* no tlp ortu */}
                 <div className="mb-4">
                   <label
-                    className="block text-gray-700 text-sm font-semibold mb-2"
+                    className="block text-graxy-700 text-sm font-semibold mb-2"
                     htmlFor="noTlpOrtu"
                   >
                     No telp/WA orang tua
@@ -406,11 +510,14 @@ function Form() {
                       id="noTlpOrtu"
                       type="text"
                       name="no_telepon_ortu"
-                      value={dataSiswa?.no_telepon_ortu}
+                      value={dataSiswa?.no_telepon_ortu ?? ""}
                       onChange={handleChange}
                       placeholder="No telp/WA orang tua"
                     />
                   </div>
+                  {errors?.no_telepon_ortu && (
+                    <span className="text-red">{errors?.no_telepon_ortu}</span>
+                  )}
                 </div>
                 <div className="flex items-center justify-between">
                   <button
@@ -449,11 +556,14 @@ function Form() {
                       id="ayah"
                       type="text"
                       name="nama_ayah"
-                      value={dataSiswa?.nama_ayah}
+                      value={dataSiswa?.nama_ayah ?? ""}
                       onChange={handleChange}
                       placeholder="Nama ayah kandung"
                     />
                   </div>
+                  {errors?.nama_ayah && (
+                    <span className="text-red">{errors?.nama_ayah}</span>
+                  )}
                 </div>
                 {/* Nama ibu kandung */}
                 <div className="mb-4">
@@ -472,11 +582,14 @@ function Form() {
                       id="ibu"
                       type="text"
                       name="nama_ibu"
-                      value={dataSiswa?.nama_ibu}
+                      value={dataSiswa?.nama_ibu ?? ""}
                       onChange={handleChange}
                       placeholder="Nama ibu kandung"
                     />
                   </div>
+                  {errors?.nama_ibu && (
+                    <span className="text-red">{errors?.nama_ibu}</span>
+                  )}
                 </div>
                 {/* Pekerjaan ayah */}
                 <div className="mb-4">
@@ -496,10 +609,13 @@ function Form() {
                       type="text"
                       placeholder="Pekerjaan ayah"
                       name="pekerjaan_ayah"
-                      value={dataSiswa?.pekerjaan_ayah}
+                      value={dataSiswa?.pekerjaan_ayah ?? ""}
                       onChange={handleChange}
                     />
                   </div>
+                  {errors?.pekerjaan_ayah && (
+                    <span className="text-red">{errors?.pekerjaan_ayah}</span>
+                  )}
                 </div>
                 {/* Pekerjaan ibu */}
                 <div className="mb-4">
@@ -519,10 +635,13 @@ function Form() {
                       type="teks"
                       placeholder="Pekerjaan ibu"
                       name="pekerjaan_ibu"
-                      value={dataSiswa?.pekerjaan_ibu}
+                      value={dataSiswa?.pekerjaan_ibu ?? ""}
                       onChange={handleChange}
                     />
                   </div>
+                  {errors?.pekerjaan_ibu && (
+                    <span className="text-red">{errors?.pekerjaan_ibu}</span>
+                  )}
                 </div>
                 <div className="flex items-center justify-between">
                   <button
@@ -572,7 +691,8 @@ function Form() {
                             placeholder="Cari sekolah..."
                             className="w-full border-b p-2 text-sm"
                             onChange={handleSearch}
-                            value={search}
+                            name="asal_sekolah"
+                            value={dataSiswa.asal_sekolah}
                           />
                           {asalSekolah &&
                             asalSekolah.map((item, i) => (
@@ -587,6 +707,9 @@ function Form() {
                         </div>
                       )}
                     </div>
+                    {errors?.asal_sekolah && (
+                      <span className="text-red">{errors?.asal_sekolah}</span>
+                    )}
                   </div>
                   {/* Jurusan */}
                   <div className="mb-6">
@@ -599,7 +722,7 @@ function Form() {
                     <div className="input-group flex items-center justify-center">
                       <select
                         name="jurusan_id"
-                        value={dataSiswa?.jurusan_id}
+                        value={dataSiswa?.jurusan_id ?? 1}
                         onChange={handleChange}
                         className="w-full border-1 rounded shadow p-2 text-sm"
                         id="jurusan"
@@ -612,6 +735,9 @@ function Form() {
                           ))}
                       </select>
                     </div>
+                    {errors?.jurusan_id && (
+                      <span className="text-red">{errors?.jurusan_id}</span>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -623,9 +749,8 @@ function Form() {
                     Back
                   </button>
                   <button
-                    onClick={handleSubmit}
                     className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    type="button"
+                    type="submit"
                   >
                     Daftar
                   </button>
