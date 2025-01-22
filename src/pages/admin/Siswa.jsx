@@ -165,6 +165,8 @@ export default function Siswa() {
   const beaxios = useAxios();
   const [load, setLoad] = useState(true);
   const [siswas, setSiswa] = useState();
+  const [errors, setErrors] = useState();
+  const [search, setSearch] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [dataSiswa, setDataSiswa] = useState();
   const [jurusans, setJurusans] = useState();
@@ -186,6 +188,11 @@ export default function Siswa() {
   function handleChange(e) {
     setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
   }
+
+  const handleSearch = (e) => {
+    setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
+    setSearch(e.target.value);
+  };
 
   function handleDeleteSiswa(e){
     console.log(e.target.value);
@@ -213,7 +220,7 @@ export default function Siswa() {
         .catch((err) => {
           Swal.fire({
             title: "Error!",
-            text: "Error",
+            text: err.response?.data.errors,
             icon: "error",
             confirmButtonText: "Tutup"
           })
@@ -386,6 +393,7 @@ export default function Siswa() {
                       <button
                         onClick={handleDeleteSiswa}
                         className="bg-red p-2 m-1 rounded-md"
+                        value={siswa.id}
                       >
                         Delete
                       </button>
@@ -829,62 +837,36 @@ export default function Siswa() {
                       <div>
                         {/* Asal smp/mts */}
                         <div className="mb-4">
-                          <div className="relative">
-                            <p
-                              className="block text-gray-700 text-sm font-semibold mb-2"
-                              htmlFor="asalSekolah"
+                          <p
+                            className="block text-gray-700 text-sm font-semibold mb-2"
+                            htmlFor="asalSekolah"
+                          >
+                            Asal sekolah (SMP/MTs)
+                          </p>
+                          <div className="input-group flex items-center justify-center">
+                            {/* <div
+                              className="relative w-full border rounded shadow p-2 text-sm cursor-pointer"
+                              onClick={() => setIsOpen(true)}
+                              ref={searchRef}
                             >
-                              Asal sekolah (SMP/MTs)
-                            </p>
-                            <div className="relative">
-                              <div className="input-group flex items-center justify-center">
-                                <div
-                                  className="relative w-full border rounded shadow p-2 text-sm cursor-pointer"
-                                  onClick={() => setIsOpen(true)}
-                                  ref={searchRef}
-                                >
-                                  "Pilih sekolah"
-                                </div>
-                                {isOpen && (
-                                  <div
-                                    className="absolute z-10 top-[-5px] bg-white border rounded shadow mt-1 w-full max-h-64 overflow-y-auto"
-                                    ref={dropdownRef}
-                                  >
-                                    <input
-                                      type="text"
-                                      placeholder="Cari sekolah..."
-                                      className="w-full border-b p-2 text-sm"
-                                      // onChange={handleSearch}
-                                      // value={search}
-                                    />
+                              {selectedSekolah || "Pilih sekolah"}
+                            </div> */}
 
-                                    <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">
-                                      sekolah 1
-                                    </div>
-                                    <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">
-                                      sekolah 2
-                                    </div>
-                                    <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">
-                                      sekolah 3
-                                    </div>
-                                    <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">
-                                      sekolah 4
-                                    </div>
-                                    {/* {asalSekolah &&
-                                            asalSekolah.map((item, i) => (
-                                              <div
-                                              key={i}
-                                              className="p-2 text-sm hover:bg-gray-100 cursor-pointer"
-                                              onClick={() => handleSelect(item.sekolah)}
-                                            >
-                                              {item.sekolah}
-                                            </div>
-                                        ))} */}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
+                                <input
+                                  type="text"
+                                  placeholder="Asal sekolah"
+                                  className="w-full border-2 px-2 py-2 bg-white shadow-bottom-only rounded-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                  onChange={handleSearch}
+                                  name="asal_sekolah"
+                                  value={search}
+                                />
+                              
+                            {/* {isOpen && (
+                            )} */}
                           </div>
+                          {errors?.asal_sekolah && (
+                            <span className="text-red">{errors?.asal_sekolah}</span>
+                          )}
                         </div>
                         {/* Jurusan */}
                         <div className="mb-6">

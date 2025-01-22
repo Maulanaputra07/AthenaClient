@@ -36,11 +36,11 @@ function Form() {
     setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
   }
 
-  const handleSelect = (item) => {
-    setSelectedSekolah(item);
-    setDataSiswa({ ...dataSiswa, asal_sekolah: item });
-    setIsOpen(false);
-  };
+  // const handleSelect = (item) => {
+  //   setSelectedSekolah(item);
+  //   setDataSiswa({ ...dataSiswa, asal_sekolah: item });
+  //   setIsOpen(false);
+  // };
 
   const handleSearch = (e) => {
     setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
@@ -126,16 +126,16 @@ function Form() {
     document.addEventListener("mousedown", handleClickOutside);
 
     const fetchData = async () => {
-      let url =
-        "https://api-sekolah-indonesia.vercel.app/sekolah/smp?kab_kota=031800&page=1&perPage=30";
+      // let url =
+      //   "https://api-sekolah-indonesia.vercel.app/sekolah/smp?kab_kota=031800&page=1&perPage=30";
 
-      if (search.trim()) {
-        url = `https://api-sekolah-indonesia.vercel.app/sekolah/s?sekolah=${search}`;
-      }
+      // if (search.trim()) {
+      //   url = `https://api-sekolah-indonesia.vercel.app/sekolah/s?sekolah=${search}`;
+      // }
 
       try {
-        const res = await axios.get(url);
-        setAsalSekolah(res.data.dataSekolah);
+        // const res = await axios.get(url);
+        // setAsalSekolah(res.data.dataSekolah);
 
         beaxios.get("/jurusans").then((res) => {
           setJurusans(res.data.data);
@@ -673,39 +673,25 @@ function Form() {
                       Asal sekolah (SMP/MTs)
                     </p>
                     <div className="input-group flex items-center justify-center">
-                      <div
+                      {/* <div
                         className="relative w-full border rounded shadow p-2 text-sm cursor-pointer"
                         onClick={() => setIsOpen(true)}
                         ref={searchRef}
                       >
                         {selectedSekolah || "Pilih sekolah"}
-                      </div>
+                      </div> */}
 
-                      {isOpen && (
-                        <div
-                          className="absolute bg-white top-12 border rounded shadow mt-1 w-[95%] max-h-64 overflow-y-auto z-10"
-                          ref={dropdownRef}
-                        >
                           <input
                             type="text"
-                            placeholder="Cari sekolah..."
-                            className="w-full border-b p-2 text-sm"
+                            placeholder="Asal sekolah"
+                            className="w-full border-2 px-2 py-2 bg-white shadow-bottom-only rounded-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             onChange={handleSearch}
                             name="asal_sekolah"
-                            value={dataSiswa.asal_sekolah}
+                            value={search}
                           />
-                          {asalSekolah &&
-                            asalSekolah.map((item, i) => (
-                              <div
-                                key={i}
-                                className="p-2 text-sm hover:bg-gray-100 cursor-pointer"
-                                onClick={() => handleSelect(item.sekolah)}
-                              >
-                                {item.sekolah}
-                              </div>
-                            ))}
-                        </div>
-                      )}
+                        
+                      {/* {isOpen && (
+                      )} */}
                     </div>
                     {errors?.asal_sekolah && (
                       <span className="text-red">{errors?.asal_sekolah}</span>
