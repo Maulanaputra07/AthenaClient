@@ -38,29 +38,16 @@ function Form() {
 
   const handleSelect = (item) => {
     setSelectedSekolah(item);
-    console.log(item);
-    setDataSiswa((prev) => ({
-      ...prev,
-      asal_sekolah: item,
-    }));
+    setDataSiswa({ ...dataSiswa, asal_sekolah: item });
     setIsOpen(false);
   };
 
   const handleSearch = (e) => {
-    console.log(e.target.value);
-    // setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
+    setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
     setSearch(e.target.value);
-    setDataSiswa((prev) => ({
-      ...prev,
-      asal_sekolah: e.target.value,
-    }));
   };
 
   const [step, setStep] = useState(1);
-
-  function showConsole(){
-    console.log(dataSiswa.asal_sekolah);
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -705,7 +692,7 @@ function Form() {
                             className="w-full border-b p-2 text-sm"
                             onChange={handleSearch}
                             name="asal_sekolah"
-                            value={search}
+                            value={dataSiswa.asal_sekolah}
                           />
                           {asalSekolah &&
                             asalSekolah.map((item, i) => (
@@ -723,7 +710,6 @@ function Form() {
                     {errors?.asal_sekolah && (
                       <span className="text-red">{errors?.asal_sekolah}</span>
                     )}
-                    <button onClick={showConsole}>show</button>
                   </div>
                   {/* Jurusan */}
                   <div className="mb-6">
