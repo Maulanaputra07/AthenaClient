@@ -150,6 +150,7 @@
 // }
 
 import React, { useEffect, useState, useRef } from "react";
+import Swal from "sweetalert2";
 import { useAxios } from "../../config/hooks";
 import {
   GraduationCap,
@@ -188,7 +189,38 @@ export default function Siswa() {
   }
 
   function handleDeleteSiswa(e){
-    console.log("Delete");
+    console.log(e.target.value);
+    Swal.fire({
+      title: "Yakin Ingin Menghapus data siswa ini?",
+      text: "data siswa yang hilang tidak bisa dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if(result.isConfirmed){
+        beaxios
+        .delete(`/siswa/${e.target.value}`)
+        .then((res) => {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Berhasil menghapus data siswa",
+            icon: "success"
+          }).then(() => {
+            window.location.reload();
+          });
+        })
+        .catch((err) => {
+          Swal.fire({
+            title: "Error!",
+            text: "Error",
+            icon: "error",
+            confirmButtonText: "Tutup"
+          })
+        })
+      }
+    })
   }
 
   useEffect(() => {
@@ -199,10 +231,6 @@ export default function Siswa() {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
-
-
-
     beaxios
       .get("/siswa")
       .then((res) => {
@@ -361,7 +389,7 @@ export default function Siswa() {
                     </td>
                     <td className="border border-main_dark whitespace-nowrap bg-white px-3 sticky right-0">
                       <button onClick={() => setShowPopup(!showPopup)} className="bg-orange-400 p-2 m-1 rounded-md">Edit</button>
-                      <button onClick={handleDeleteSiswa} className="bg-red p-2 m-1 rounded-md">Delete</button>
+                      <button onClick={handleDeleteSiswa} value={siswa.id} className="bg-red p-2 m-1 rounded-md">Delete</button>
                     </td>
                   </tr>
                 ))}
