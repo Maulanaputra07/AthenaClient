@@ -173,14 +173,13 @@ export default function Siswa() {
   const dropdownRef = useRef(null);
   const searchRef = useRef(null);
 
-
   const handleSelect = (item) => {
     console.log(item);
     setSelectedSekolah(item);
     setIsOpen(false);
-  }
+  };
 
-  if(showPopup){
+  if (showPopup) {
     console.log("showPopup");
   }
 
@@ -225,12 +224,18 @@ export default function Siswa() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if(dropdownRef.current && !dropdownRef.current.contains(event.target) && searchRef.current && !searchRef.current.contains(event.target)){
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        searchRef.current &&
+        !searchRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+
     beaxios
       .get("/siswa")
       .then((res) => {
@@ -243,17 +248,17 @@ export default function Siswa() {
         setLoad(false);
       });
 
-      beaxios.get("/jurusans").then((res) => {
-        setJurusans(res.data.data);
-      });
-
-      
+    beaxios.get("/jurusans").then((res) => {
+      setJurusans(res.data.data);
+    });
   }, []);
 
   return (
     <div>
       <div className="flex justify-between items-center">
-        <h1 className="ml-10 pb-3 md:mt-2 mt-4 text-lg font-semibold">Halaman siswa</h1>
+        <h1 className="ml-10 pb-3 md:mt-2 mt-4 text-lg font-semibold">
+          Halaman siswa
+        </h1>
         {/* <button onClick={() => setShowPopup(!showPopup)} className="bg-green-400 p-2 m-2 rounded-md">Tambah siswa</button> */}
       </div>
 
@@ -276,12 +281,8 @@ export default function Siswa() {
                 >
                   Nama
                 </th>
-                <th className="border border-main_dark bg-gray">
-                  NISN
-                </th>
-                <th className="border border-main_dark bg-gray">
-                  NIK
-                </th>
+                <th className="border border-main_dark bg-gray">NISN</th>
+                <th className="border border-main_dark bg-gray">NIK</th>
                 <th className="border border-main_dark bg-gray">
                   Tempat Lahir
                 </th>
@@ -291,36 +292,24 @@ export default function Siswa() {
                 <th className="border border-main_dark bg-gray">
                   Jenis Kelamin
                 </th>
-                <th className="border border-main_dark bg-gray">
-                  Agama
-                </th>
-                <th className="border border-main_dark bg-gray">
-                  Alamat
-                </th>
-                <th className="border border-main_dark bg-gray">
-                  No Telp.
-                </th>
+                <th className="border border-main_dark bg-gray">Agama</th>
+                <th className="border border-main_dark bg-gray">Alamat</th>
+                <th className="border border-main_dark bg-gray">No Telp.</th>
                 <th className="border border-main_dark bg-gray">
                   Asal Sekolah
                 </th>
                 <th className="border border-main_dark bg-gray">
                   No.Telp. Ortu
                 </th>
-                <th className="border border-main_dark bg-gray">
-                  Ayah
-                </th>
-                <th className="border border-main_dark bg-gray">
-                  Ibu
-                </th>
+                <th className="border border-main_dark bg-gray">Ayah</th>
+                <th className="border border-main_dark bg-gray">Ibu</th>
                 <th className="border border-main_dark bg-gray">
                   Pekerjaan Ayah
                 </th>
                 <th className="border border-main_dark bg-gray">
                   Pekerjaan Ibu
                 </th>
-                <th className="border border-main_dark bg-gray">
-                  Jurusan
-                </th>
+                <th className="border border-main_dark bg-gray">Jurusan</th>
                 <th className="border border-main_dark bg-white sticky right-0 z-10">
                   Action
                 </th>
@@ -388,8 +377,18 @@ export default function Siswa() {
                       {siswa.jurusan}
                     </td>
                     <td className="border border-main_dark whitespace-nowrap bg-white px-3 sticky right-0">
-                      <button onClick={() => setShowPopup(!showPopup)} className="bg-orange-400 p-2 m-1 rounded-md">Edit</button>
-                      <button onClick={handleDeleteSiswa} value={siswa.id} className="bg-red p-2 m-1 rounded-md">Delete</button>
+                      <button
+                        onClick={() => setShowPopup(!showPopup)}
+                        className="bg-orange-400 p-2 m-1 rounded-md"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={handleDeleteSiswa}
+                        className="bg-red p-2 m-1 rounded-md"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -397,18 +396,16 @@ export default function Siswa() {
           </table>
         )}
       </div>
-      
-      {showPopup && (
-        <>
 
-        <div className="fixed inset-0 bg-black/50 backdrop:blur-sm z-10"></div>
+        {showPopup && (
+          <>
+            <div className="fixed inset-0 bg-black/50 backdrop:blur-sm z-10"></div>
 
-        <div className="absolute z-20 top-0 m-5 md:right-[25%] left-0 md:left-[25%] md:w-[50%] w-[90%] h-[86%] bg-white rounded-md shadow-md">
-          <h1 className="p-3 font-semibold">EDIT SISWA</h1>
-          <div className="flex flex-col justify-between px-4">
-              <div>
+            <div className="absolute z-20 top-0 m-5 md:right-[25%] left-0 md:left-[25%] md:w-[50%] w-[90%] h-[86%] bg-white rounded-md shadow-md">
+              <h1 className="p-3 font-semibold">EDIT SISWA</h1>
+              <div className="flex flex-col justify-between px-4">
                 <form>
-                  <div className="h-auto overflow-y-auto bg-white p-6 mb-4">
+                  <div className="h-[30em] overflow-y-auto bg-white p-6 mb-4">
                     <div className="step1 flex flex-col justify-between">
                       <div>
                         {/* Nama */}
@@ -484,13 +481,13 @@ export default function Siswa() {
                         </div>
                       </div>
                       {/* <div className="flex items-center justify-end pt-5">
-                        <button
-                          className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                          type="submit"
-                        >
-                          Next
-                        </button>
-                      </div> */}
+                          <button
+                            className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="submit"
+                          >
+                            Next
+                          </button>
+                        </div> */}
                     </div>
                     <div className="step2 flex flex-col justify-between">
                       <div>
@@ -578,21 +575,21 @@ export default function Siswa() {
                       </div>
 
                       {/* <div className="flex items-center justify-between">
-                        <button
-                          // onClick={prevStep}
-                          className="bg-white hover:bg-[#F1F1F1] text-[#5e72e4] font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                          type="button"
-                        >
-                          Back
-                        </button>
-                        <button
-                          // onClick={nextStep}
-                          className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                          type="button"
-                        >
-                          Next
-                        </button>
-                      </div> */}
+                          <button
+                            // onClick={prevStep}
+                            className="bg-white hover:bg-[#F1F1F1] text-[#5e72e4] font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="button"
+                          >
+                            Back
+                          </button>
+                          <button
+                            // onClick={nextStep}
+                            className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="button"
+                          >
+                            Next
+                          </button>
+                        </div> */}
                     </div>
                     <div className="step3">
                       {/* agama */}
@@ -702,21 +699,21 @@ export default function Siswa() {
                         </div>
                       </div>
                       {/* <div className="flex items-center justify-between">
-                        <button
-                          // onClick={prevStep}
-                          className="bg-white hover:bg-[#F1F1F1] text-[#5e72e4] font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                          type="button"
-                        >
-                          Back
-                        </button>
-                        <button
-                          // onClick={nextStep}
-                          className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                          type="button"
-                        >
-                          Next
-                        </button>
-                      </div> */}
+                          <button
+                            // onClick={prevStep}
+                            className="bg-white hover:bg-[#F1F1F1] text-[#5e72e4] font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="button"
+                          >
+                            Back
+                          </button>
+                          <button
+                            // onClick={nextStep}
+                            className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="button"
+                          >
+                            Next
+                          </button>
+                        </div> */}
                     </div>
                     <div className="step4">
                       {/* Nama ayah kandung */}
@@ -812,21 +809,21 @@ export default function Siswa() {
                         </div>
                       </div>
                       {/* <div className="flex items-center justify-between">
-                        <button
-                          // onClick={prevStep}
-                          className="bg-white hover:bg-[#F1F1F1] text-[#5e72e4] font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                          type="button"
-                        >
-                          Back
-                        </button>
-                        <button
-                          // onClick={nextStep}
-                          className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                          type="button"
-                        >
-                          Next
-                        </button>
-                      </div> */}
+                          <button
+                            // onClick={prevStep}
+                            className="bg-white hover:bg-[#F1F1F1] text-[#5e72e4] font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="button"
+                          >
+                            Back
+                          </button>
+                          <button
+                            // onClick={nextStep}
+                            className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="button"
+                          >
+                            Next
+                          </button>
+                        </div> */}
                     </div>
                     <div className="step5 flex flex-col justify-between">
                       <div>
@@ -841,40 +838,50 @@ export default function Siswa() {
                             </p>
                             <div className="relative">
                               <div className="input-group flex items-center justify-center">
-                                <div className="relative w-full border rounded shadow p-2 text-sm cursor-pointer"
-                                  onClick={()=> setIsOpen(true)}
+                                <div
+                                  className="relative w-full border rounded shadow p-2 text-sm cursor-pointer"
+                                  onClick={() => setIsOpen(true)}
                                   ref={searchRef}
-                                  >
+                                >
                                   "Pilih sekolah"
                                 </div>
-                                  {isOpen && (
-                                    <div className="absolute z-10 top-[-5px] bg-white border rounded shadow mt-1 w-full max-h-64 overflow-y-auto" 
+                                {isOpen && (
+                                  <div
+                                    className="absolute z-10 top-[-5px] bg-white border rounded shadow mt-1 w-full max-h-64 overflow-y-auto"
                                     ref={dropdownRef}
-                                    >
-                                        <input
-                                          type="text"
-                                          placeholder="Cari sekolah..."
-                                          className="w-full border-b p-2 text-sm"
-                                          // onChange={handleSearch}
-                                          // value={search}
-                                        />
+                                  >
+                                    <input
+                                      type="text"
+                                      placeholder="Cari sekolah..."
+                                      className="w-full border-b p-2 text-sm"
+                                      // onChange={handleSearch}
+                                      // value={search}
+                                    />
 
-                                        <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">sekolah 1</div>
-                                        <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">sekolah 2</div>
-                                        <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">sekolah 3</div>
-                                        <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">sekolah 4</div>
-                                        {/* {asalSekolah &&
-                                          asalSekolah.map((item, i) => (
-                                            <div
-                                            key={i}
-                                            className="p-2 text-sm hover:bg-gray-100 cursor-pointer"
-                                            onClick={() => handleSelect(item.sekolah)}
-                                          >
-                                            {item.sekolah}
-                                          </div>
-                                      ))} */}
+                                    <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">
+                                      sekolah 1
                                     </div>
-                                  )}
+                                    <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">
+                                      sekolah 2
+                                    </div>
+                                    <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">
+                                      sekolah 3
+                                    </div>
+                                    <div className="p-2 text-sm hover:bg-gray-100 cursor-pointer">
+                                      sekolah 4
+                                    </div>
+                                    {/* {asalSekolah &&
+                                            asalSekolah.map((item, i) => (
+                                              <div
+                                              key={i}
+                                              className="p-2 text-sm hover:bg-gray-100 cursor-pointer"
+                                              onClick={() => handleSelect(item.sekolah)}
+                                            >
+                                              {item.sekolah}
+                                            </div>
+                                        ))} */}
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -888,7 +895,7 @@ export default function Siswa() {
                             Pilih paket keahlian
                           </label>
                           <div className="input-group flex items-center justify-center">
-                          <select
+                            <select
                               name="jurusan_id"
                               value={dataSiswa?.jurusan_id}
                               onChange={handleChange}
@@ -905,35 +912,27 @@ export default function Siswa() {
                           </div>
                         </div>
                       </div>
-                      {/* <div className="flex items-center justify-between">
-                        <button
-                          // onClick={prevStep}
-                          className="bg-white hover:bg-[#F1F1F1] text-[#5e72e4] font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                          type="button"
-                        >
-                          Back
-                        </button>
-                        <button
-                          // onClick={handleSubmit}
-                          className="bg-[#5e72e4] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                          type="button"
-                        >
-                          Daftar
-                        </button>
-                      </div> */}
                     </div>
                   </div>
                   <div className="flex w-full justify-between">
-                      <button onClick={() => setShowPopup(!showPopup)} className="p-3 text-b rounded-md  bg-white hover:bg-[#F1F1F1] text-[#5e72e4]">Kembali</button>
-                      <button onClick={() => setShowPopup(!showPopup)} className="p-3 text-b rounded-md bg-[#5e72e4] hover:bg-blue-700 text-white">Simpan</button>
+                    <button
+                      onClick={() => setShowPopup(!showPopup)}
+                      className="p-3 text-b rounded-md  bg-white hover:bg-[#F1F1F1] text-[#5e72e4]"
+                    >
+                      Kembali
+                    </button>
+                    <button
+                      onClick={() => setShowPopup(!showPopup)}
+                      className="p-3 text-b rounded-md bg-[#5e72e4] hover:bg-blue-700 text-white"
+                    >
+                      Simpan
+                    </button>
                   </div>
                 </form>
               </div>
-          </div>
-        </div>
-
-        </>
-      )}
+            </div>
+          </>
+        )}
     </div>
   );
 }

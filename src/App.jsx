@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/navbar";
 import FormAthena from "./pages/form";
 import Dashboard from "./pages/admin/dashboard";
 import Login from "./pages/admin/login";
