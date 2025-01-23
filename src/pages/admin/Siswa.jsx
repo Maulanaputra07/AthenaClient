@@ -60,13 +60,11 @@ export default function Siswa() {
         }).then(() => window.location.reload());
       })
       .catch((err) => {
-        console.log(err);
+        setErrors(err.response.data.errors);
         Swal.fire({
           icon: "error",
           title: "Error",
           text: err.response.data.message,
-        }).then(() => {
-          window.location.reload();
         });
       })
       .finally(() => {
