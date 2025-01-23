@@ -20,8 +20,7 @@ export default function Siswa() {
   const [jurusans, setJurusans] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSekolah, setSelectedSekolah] = useState("");
-  const dropdownRef = useRef(null);
-  const searchRef = useRef(null);
+  const modalRef = useRef(null);
 
   const handleSelect = (item) => {
     console.log(item);
@@ -124,17 +123,18 @@ export default function Siswa() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        searchRef.current &&
-        !searchRef.current.contains(event.target)
-      ) {
-        setIsOpen(false);
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setShowPopup(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    if (showPopup) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    // document.addEventListener("mousedown", handleClickOutside);
 
     beaxios
       .get("/siswa")
@@ -151,14 +151,14 @@ export default function Siswa() {
     beaxios.get("/jurusans").then((res) => {
       setJurusans(res.data.data);
     });
-  }, []);
+  }, [showPopup]);
 
   return (
     <div>
-      <div className="flex justify-between items-center">
         <h1 className="ml-10 pb-3 md:mt-2 mt-4 text-lg font-semibold">
           Halaman siswa
         </h1>
+      <div className="flex justify-between items-center">
         <div className="flex gap-2">
           <input
             type="text"
@@ -318,7 +318,9 @@ export default function Siswa() {
         <>
           <div className="fixed inset-0 bg-black/50 backdrop:blur-sm z-10"></div>
 
-          <div className="absolute z-20 top-0 m-5 md:right-[25%] left-0 md:left-[25%] md:w-[50%] w-[90%] bg-white rounded-md shadow-md">
+          <div
+            ref={modalRef}
+            className="absolute z-20 top-0 m-5 md:right-[25%] left-0 md:left-[25%] md:w-[50%] w-[90%] bg-white rounded-md shadow-md">
             <h1 className="p-3 font-semibold">EDIT SISWA</h1>
             <div className="flex flex-col justify-between px-4">
               <form
