@@ -58,7 +58,7 @@ function Dashboard() {
           </button>
         </li>
       </Sidebar>
-      <div className="content h-screen overflow-y-auto bg-white w-full p-4">
+      <div className="content sticky h-screen overflow-y-auto bg-white w-full p-4">
         <Outlet />
       </div>
     </div>

@@ -166,9 +166,8 @@ export default function Siswa() {
   const [load, setLoad] = useState(true);
   const [siswas, setSiswa] = useState();
   const [errors, setErrors] = useState();
-  const [search, setSearch] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-  const [dataSiswa, setDataSiswa] = useState();
+  const [detailSiswa, setDetailSiswa] = useState();
   const [jurusans, setJurusans] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSekolah, setSelectedSekolah] = useState("");
@@ -181,18 +180,24 @@ export default function Siswa() {
     setIsOpen(false);
   };
 
-  if (showPopup) {
-    console.log("showPopup");
+  // if (showPopup) {
+  //   console.log("showPopup");
+  // }
+
+  function popUp(e){
+    setShowPopup(!showPopup)
+    console.log(e.target.value);
+    beaxios
+      .get(`/siswa/${e.target.value}`)
+      .then((res) => {
+        setDetailSiswa(res.data.data);
+        console.log(res.data.data);
+      })
   }
 
   function handleChange(e) {
-    setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
+    setDetailSiswa({ ...detailSiswa, [e.target.name]: e.target.value });
   }
-
-  const handleSearch = (e) => {
-    setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
-    setSearch(e.target.value);
-  };
 
   function handleDeleteSiswa(e){
     console.log(e.target.value);
@@ -266,6 +271,15 @@ export default function Siswa() {
         <h1 className="ml-10 pb-3 md:mt-2 mt-4 text-lg font-semibold">
           Halaman siswa
         </h1>
+        <div className="flex gap-2">
+          <input type="text" className="border border-black text-black p-2 rounded" placeholder="Search"/>
+          <button className="bg-green-500 p-1.5 rounded border border-green-500">Export Excel</button>
+          <select name="" id="" className="border rounded w-24 text-center">
+            <option value="">All</option>
+            <option value="">Verify</option>
+            <option value="">Unverify</option>
+          </select>
+        </div>
         {/* <button onClick={() => setShowPopup(!showPopup)} className="bg-green-400 p-2 m-2 rounded-md">Tambah siswa</button> */}
       </div>
 
@@ -385,8 +399,9 @@ export default function Siswa() {
                     </td>
                     <td className="border border-main_dark whitespace-nowrap bg-white px-3 sticky right-0">
                       <button
-                        onClick={() => setShowPopup(!showPopup)}
+                        onClick={popUp}
                         className="bg-orange-400 p-2 m-1 rounded-md"
+                        value={siswa.id}
                       >
                         Edit
                       </button>
@@ -409,11 +424,11 @@ export default function Siswa() {
           <>
             <div className="fixed inset-0 bg-black/50 backdrop:blur-sm z-10"></div>
 
-            <div className="absolute z-20 top-0 m-5 md:right-[25%] left-0 md:left-[25%] md:w-[50%] w-[90%] h-[86%] bg-white rounded-md shadow-md">
+            <div className="absolute z-20 top-0 m-5 md:right-[25%] left-0 md:left-[25%] md:w-[50%] w-[90%] bg-white rounded-md shadow-md">
               <h1 className="p-3 font-semibold">EDIT SISWA</h1>
               <div className="flex flex-col justify-between px-4">
-                <form>
-                  <div className="h-[30em] overflow-y-auto bg-white p-6 mb-4">
+                <form className="bg-white p-6 mb-4">
+                  <div className="overflow-y-auto">
                     <div className="step1 flex flex-col justify-between">
                       <div>
                         {/* Nama */}
@@ -434,8 +449,8 @@ export default function Siswa() {
                               name="name"
                               type="text"
                               placeholder="Nama"
-                              // value={dataSiswa?.name}
-                              // onChange={handleChange}
+                              value={detailSiswa?.name}
+                              onChange={handleChange}
                             />
                           </div>
                         </div>
@@ -458,8 +473,8 @@ export default function Siswa() {
                               type="text"
                               name="nisn"
                               placeholder="NISN"
-                              // value={dataSiswa?.nisn}
-                              // onChange={handleChange}
+                              value={detailSiswa?.nisn}
+                              onChange={handleChange}
                             />
                           </div>
                         </div>
@@ -482,8 +497,8 @@ export default function Siswa() {
                               type="text"
                               placeholder="NIK"
                               name="nik"
-                              // value={dataSiswa?.nik}
-                              // onChange={handleChange}
+                              value={detailSiswa?.nik}
+                              onChange={handleChange}
                             />
                           </div>
                         </div>
@@ -517,8 +532,8 @@ export default function Siswa() {
                               type="text"
                               placeholder="Tempat Lahir"
                               name="tempat_lahir"
-                              // value={dataSiswa?.tempat_lahir}
-                              // onChange={handleChange}
+                              value={detailSiswa?.tempat_lahir}
+                              onChange={handleChange}
                             />
                           </div>
                         </div>
@@ -540,8 +555,8 @@ export default function Siswa() {
                               type="date"
                               placeholder="Tanggal Lahir"
                               name="tanggal_lahir"
-                              // value={dataSiswa?.tanggal_lahir}
-                              // onChange={handleChange}
+                              value={detailSiswa?.tanggal_lahir}
+                              onChange={handleChange}
                             />
                           </div>
                         </div>
@@ -555,8 +570,8 @@ export default function Siswa() {
                           </label>
                           <div className="input-group flex items-center justify-center">
                             <select
-                              // value={dataSiswa?.jenis_kelamin}
-                              // onChange={handleChange}
+                              value={detailSiswa?.jenis_kelamin}
+                              onChange={handleChange}
                               name="jenis_kelamin"
                               className="w-full border-1 shadow p-2"
                               id="jenisKelamin"
@@ -610,8 +625,8 @@ export default function Siswa() {
                         </label>
                         <div className="input-group flex items-center justify-center">
                           <select
-                            // value={dataSiswa?.agama}
-                            // onChange={handleChange}
+                            value={detailSiswa?.agama}
+                            onChange={handleChange}
                             name="agama"
                             className="w-full border-1 rounded shadow p-2"
                             id="agama"
@@ -655,8 +670,8 @@ export default function Siswa() {
                             type="teks"
                             placeholder="Alamat lengkap"
                             name="alamat_lengkap"
-                            // value={dataSiswa?.alamat_lengkap}
-                            // onChange={handleChange}
+                            value={detailSiswa?.alamat_lengkap}
+                            onChange={handleChange}
                           />
                         </div>
                       </div>
@@ -677,8 +692,8 @@ export default function Siswa() {
                             id="noTlp"
                             type="text"
                             name="no_telepon"
-                            // value={dataSiswa?.no_telepon}
-                            // onChange={handleChange}
+                            value={detailSiswa?.no_telepon}
+                            onChange={handleChange}
                             placeholder="No telp/WA calon peserta didik"
                           />
                         </div>
@@ -700,8 +715,8 @@ export default function Siswa() {
                             id="noTlpOrtu"
                             type="text"
                             name="no_telepon_ortu"
-                            // value={dataSiswa?.no_telepon_ortu}
-                            // onChange={handleChange}
+                            value={detailSiswa.ortu?.no_telepon}
+                            onChange={handleChange}
                             placeholder="No telp/WA orang tua"
                           />
                         </div>
@@ -741,7 +756,7 @@ export default function Siswa() {
                             id="ayah"
                             type="text"
                             name="nama_ayah"
-                            // value={dataSiswa?.nama_ayah}
+                            value={detailSiswa.ortu?.nama_ayah}
                             // onChange={handleChange}
                             placeholder="Nama ayah kandung"
                           />
@@ -764,7 +779,7 @@ export default function Siswa() {
                             id="ibu"
                             type="text"
                             name="nama_ibu"
-                            // value={dataSiswa?.nama_ibu}
+                            value={detailSiswa.ortu?.nama_ibu}
                             // onChange={handleChange}
                             placeholder="Nama ibu kandung"
                           />
@@ -788,7 +803,7 @@ export default function Siswa() {
                             type="text"
                             placeholder="Pekerjaan ayah"
                             name="pekerjaan_ayah"
-                            // value={dataSiswa?.pekerjaan_ayah}
+                            value={detailSiswa.ortu?.pekerjaan_ayah}
                             // onChange={handleChange}
                           />
                         </div>
@@ -811,7 +826,7 @@ export default function Siswa() {
                             type="teks"
                             placeholder="Pekerjaan ibu"
                             name="pekerjaan_ibu"
-                            // value={dataSiswa?.pekerjaan_ibu}
+                            value={detailSiswa.ortu?.pekerjaan_ibu}
                             // onChange={handleChange}
                           />
                         </div>
@@ -858,7 +873,7 @@ export default function Siswa() {
                                   className="w-full border-2 px-2 py-2 bg-white shadow-bottom-only rounded-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                   onChange={handleSearch}
                                   name="asal_sekolah"
-                                  value={search}
+                                  value={detailSiswa?.asal_sekolah}
                                 />
                               
                             {/* {isOpen && (
@@ -879,7 +894,7 @@ export default function Siswa() {
                           <div className="input-group flex items-center justify-center">
                             <select
                               name="jurusan_id"
-                              value={dataSiswa?.jurusan_id}
+                              value={detailSiswa?.jurusan_id}
                               onChange={handleChange}
                               className="w-full border-1 rounded shadow p-2 text-sm"
                               id="jurusan"
