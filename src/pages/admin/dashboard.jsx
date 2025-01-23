@@ -42,6 +42,12 @@ function Dashboard() {
           active={location.includes("/siswa")}
           to="siswa"
         />
+        <SidebarItem
+          text="Scan"
+          name="Scan"
+          active={location.includes("/scan")}
+          to="scan"
+        />
         {/* <SidebarItem text="Logout" onClick={handleLogout} /> */}
         <li className="ml-36 md:ml-0">
           <button
@@ -52,7 +58,7 @@ function Dashboard() {
           </button>
         </li>
       </Sidebar>
-      <div className="content h-screen overflow-y-auto bg-white w-full p-4">
+      <div className="content sticky h-screen overflow-y-auto bg-white w-full p-4">
         <Outlet />
       </div>
     </div>
