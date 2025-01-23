@@ -871,7 +871,6 @@ export default function Siswa() {
                                   type="text"
                                   placeholder="Asal sekolah"
                                   className="w-full border-2 px-2 py-2 bg-white shadow-bottom-only rounded-md text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                  onChange={handleSearch}
                                   name="asal_sekolah"
                                   value={detailSiswa?.asal_sekolah}
                                 />
