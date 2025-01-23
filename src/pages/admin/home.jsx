@@ -32,7 +32,7 @@ export default function Home() {
 
         setPendaftar({ today: todayLength(), all: res.data.data.length });
       })
-      .catch((err) => window.location.reload())
+      .catch((err) => console.log(err.response.data.message))
       .finally(() => {
         setLoad(false);
       });
