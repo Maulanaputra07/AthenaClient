@@ -32,31 +32,31 @@ export default function Home() {
 
         setPendaftar({ today: todayLength(), all: res.data.data.length });
       })
-      .catch((err) => window.location.reload())
+      .catch((err) => console.log(err.response.data.message))
       .finally(() => {
         setLoad(false);
       });
   }, []);
   return (
     <>
-    <div className="ml-10">
-      <h1 className="text-2xl">Selamat Datang, Admin</h1>
-      <p>Ini adalah halaman Dashboard!</p>
-    </div>
+      <div className="ml-10">
+        <h1 className="text-2xl">Selamat Datang, Admin</h1>
+        <p>Ini adalah halaman Dashboard!</p>
+      </div>
 
-      <div className="md:grid md:grid-cols-3 gap-5 py-4 flex flex-col max-w-max">
-        {load ? (
-          <>Loading...</>
-        ) : (
-          <>
+      {load ? (
+        <>Loading...</>
+      ) : (
+        <>
+          <div className="md:grid md:grid-cols-3  gap-5 py-4 flex flex-col max-w-max">
             <div className="flex w-full gap-5">
               <Card title="Total Jumlah Pendaftar" digit={pendaftar.all} />
               <Card title="Pendaftar Hari ini" digit={pendaftar.today} />
             </div>
             <CardTable title="Pendaftar Terbaru" data={newest} />
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
     </>
   );
 }
