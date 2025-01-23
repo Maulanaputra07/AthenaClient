@@ -59,13 +59,11 @@ export default function Siswa() {
         }).then(() => window.location.reload());
       })
       .catch((err) => {
-        console.log(err);
+        setErrors(err.response.data.errors);
         Swal.fire({
           icon: "error",
           title: "Error",
           text: err.response.data.message,
-        }).then(() => {
-          window.location.reload();
         });
       })
       .finally(() => {
@@ -84,6 +82,34 @@ export default function Siswa() {
 
   function handleChange(e) {
     setDetailSiswa({ ...detailSiswa, [e.target.name]: e.target.value });
+  }
+
+  function handleSearch(e) {
+    beaxios
+      .get(`/siswa?search=${e.target.value}`)
+      .then((res) => {
+        setSiswa(res.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setLoad(false);
+      });
+  }
+
+  function handleVerifyFilter(e) {
+    beaxios
+      .get(`/siswa?verified=${e.target.value}`)
+      .then((res) => {
+        setSiswa(res.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setLoad(false);
+      });
   }
 
   function handleDeleteSiswa(e) {
@@ -147,31 +173,33 @@ export default function Siswa() {
       .finally(() => {
         setLoad(false);
       });
-
-    beaxios.get("/jurusans").then((res) => {
-      setJurusans(res.data.data);
-    });
-  }, [showPopup]);
+  }, []);
 
   return (
     <div>
-        <h1 className="ml-10 pb-3 md:mt-2 mt-4 text-lg font-semibold">
-          Halaman siswa
-        </h1>
-      <div className="flex justify-between items-center">
+      <h1 className="ml-10 pb-3 md:mt-2 mt-4 text-lg font-semibold">
+        Halaman siswa
+      </h1>
+      <div className="flex justify-end items-center">
         <div className="flex gap-2">
           <input
             type="text"
             className="border border-black text-black p-2 rounded"
-            placeholder="Search"
+            placeholder="Search by name..."
+            onChange={handleSearch}
           />
           <button className="bg-green-500 p-1.5 rounded border border-green-500">
             Export Excel
           </button>
-          <select name="" id="" className="border rounded w-24 text-center">
-            <option value="">All</option>
-            <option value="">Verify</option>
-            <option value="">Unverify</option>
+          <select
+            name=""
+            id=""
+            onInput={handleVerifyFilter}
+            className="border rounded w-24 text-center"
+          >
+            <option value="all">All</option>
+            <option value="true">Verify</option>
+            <option value="false">Unverify</option>
           </select>
         </div>
         {/* <button onClick={() => setShowPopup(!showPopup)} className="bg-green-400 p-2 m-2 rounded-md">Tambah siswa</button> */}
@@ -196,6 +224,7 @@ export default function Siswa() {
                 >
                   Nama
                 </th>
+                <th className="border border-main_dark bg-gray">status</th>
                 <th className="border border-main_dark bg-gray">NISN</th>
                 <th className="border border-main_dark bg-gray">NIK</th>
                 <th className="border border-main_dark bg-gray">
@@ -245,6 +274,9 @@ export default function Siswa() {
                       style={{ width: "200px" }}
                     >
                       {siswa.name}
+                    </td>
+                    <td className="border border-main_dark whitespace-nowrap px-3">
+                      {siswa.status ? "Verified" : "Unverified"}
                     </td>
                     <td className="border border-main_dark whitespace-nowrap px-3">
                       {siswa.nisn}
