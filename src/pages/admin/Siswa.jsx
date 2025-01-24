@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
-import { useAxios } from "../../config/hooks";
+import { getGenderText, getSheetName, useAxios } from "../../config/hooks";
 import {
   GraduationCap,
   IdentificationCard,
@@ -11,6 +11,7 @@ import {
   ArrowLeft,
   ArrowRight
 } from "@phosphor-icons/react";
+import * as XLSX from "xlsx";
 import { Button, IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
@@ -29,10 +30,7 @@ export default function Siswa() {
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
 
-    // const next = () => {
-    //   setActive((prevActive) => prevActive + 10);
-    //   setPage(page+1);
-    // };
+
     const next = () => {
       if (active + itemsPerPage < siswas.length) {
         setActive((prevActive) => prevActive + itemsPerPage);
@@ -40,10 +38,6 @@ export default function Siswa() {
       }
     };
 
-    // const prev = () => {
-    //   setActive((prevActive) => (prevActive > 0 ? prevActive - 10 : 0));
-    //   setPage(page-1);      
-    // };
     const prev = () => {
       if (active > 0) {
         setActive((prevActive) => prevActive - itemsPerPage);
@@ -176,6 +170,83 @@ export default function Siswa() {
     });
   }
 
+  const exportFilteredDataByJurusan = () => {
+    const filteredData = siswas.filter((item) => item.status === 1);
+  
+    const groupedByJurusan = filteredData.reduce((groups, item) => {
+      const { jurusan } = item;
+      if (!groups[jurusan]) {
+        groups[jurusan] = [];
+      }
+      groups[jurusan].push(item);
+      return groups;
+    }, {});
+  
+    const workbook = XLSX.utils.book_new();
+  
+    const columns = {
+      id: "No.",
+      name: "Nama Siswa",
+      jurusan: "Program Studi",
+      nisn: "NISN",
+      nik: "NIK",
+      tempat_lahir: "Tempat Lahir",
+      tanggal_lahir: "Tanggal Lahir",
+      jenis_kelamin: "Jenis Kelamin",
+      agama: "Agama",
+      alamat_lengkap: "Alamat",
+      no_telepon: "No. Telepon",
+      'ortu.no_telepon': "No. Telepon Ortu", 
+      'ortu.nama_ayah': "Nama Ayah",
+      'ortu.nama_ibu': "Nama Ibu",
+      'ortu.pekerjaan_ayah': "Pekerjaan Ayah",
+      'ortu.pekerjaan_ibu': "Pekerjaan Ibu",
+      asal_sekolah: "Asal Sekolah",
+      jurusan_id: "ID Jurusan",
+    };
+  
+  
+    for (const jurusan in groupedByJurusan) {
+      const sheetName = getSheetName(jurusan);
+      const sheetData = groupedByJurusan[jurusan];
+  
+      let customData = sheetData.map((item, index) => {
+        let filteredItem = {};
+        
+        for (const [key, value] of Object.entries(columns)) {
+          if (key === "id") {
+            filteredItem[value] = index + 1;
+          } else if (key === "jenis_kelamin") {
+            filteredItem[value] = getGenderText(item[key]);
+          } else if (key.includes("ortu.")) {
+            const nestedKey = key.split('.')[1];
+            filteredItem[value] = item.ortu ? item.ortu[nestedKey] : '';
+          } else if (item[key] !== undefined) {
+            filteredItem[value] = item[key];
+          }
+        }
+        return filteredItem;
+      });
+  
+      const worksheet = XLSX.utils.json_to_sheet(customData);
+  
+      const columnWidths = customData.reduce((widths, row) => {
+        Object.keys(row).forEach((key, index) => {
+          const cellValue = row[key] ? row[key].toString() : '';
+          const columnWidth = Math.max(cellValue.length, widths[index] || 0);
+          widths[index] = columnWidth;
+        });
+        return widths;
+      }, []);
+  
+      worksheet['!cols'] = columnWidths.map((width) => ({ wch: width }));
+  
+      XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+    }
+  
+    XLSX.writeFile(workbook, "CalonSiswa.xlsx");
+  };
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -195,7 +266,6 @@ export default function Siswa() {
       .get(`/siswa`)
       .then((res) => {
         setSiswa(res.data.data);
-        // console.log();
         setTotal(res.data.data.length);
       })
       .catch((err) => {
@@ -219,7 +289,10 @@ export default function Siswa() {
             placeholder="Search by name..."
             onChange={handleSearch}
           />
-          <button className="bg-green-500 p-1.5 rounded border border-green-500">
+          <button
+            onClick={exportFilteredDataByJurusan}
+            className="bg-green-500 p-1.5 rounded border border-green-500"
+          >
             Export Excel
           </button>
           <select
