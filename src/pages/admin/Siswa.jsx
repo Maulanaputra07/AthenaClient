@@ -8,7 +8,11 @@ import {
   CalendarDots,
   DeviceMobile,
   UserCircle,
+  ArrowLeft,
+  ArrowRight
 } from "@phosphor-icons/react";
+import { Button, IconButton } from "@material-tailwind/react";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 export default function Siswa() {
   const beaxios = useAxios();
@@ -18,9 +22,34 @@ export default function Siswa() {
   const [showPopup, setShowPopup] = useState(false);
   const [detailSiswa, setDetailSiswa] = useState();
   const [jurusans, setJurusans] = useState();
+  const [active, setActive] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedSekolah, setSelectedSekolah] = useState("");
+  const [total, setTotal] = useState(0);
   const modalRef = useRef(null);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
+
+    // const next = () => {
+    //   setActive((prevActive) => prevActive + 10);
+    //   setPage(page+1);
+    // };
+    const next = () => {
+      if (active + itemsPerPage < siswas.length) {
+        setActive((prevActive) => prevActive + itemsPerPage);
+        setPage((prevPage) => prevPage + 1);
+      }
+    };
+
+    // const prev = () => {
+    //   setActive((prevActive) => (prevActive > 0 ? prevActive - 10 : 0));
+    //   setPage(page-1);      
+    // };
+    const prev = () => {
+      if (active > 0) {
+        setActive((prevActive) => prevActive - itemsPerPage);
+        setPage((prevPage) => Math.max(prevPage - 1, 1));
+      }
+    };
 
   const handleSelect = (item) => {
     console.log(item);
@@ -163,9 +192,11 @@ export default function Siswa() {
     // document.addEventListener("mousedown", handleClickOutside);
 
     beaxios
-      .get("/siswa")
+      .get(`/siswa`)
       .then((res) => {
         setSiswa(res.data.data);
+        // console.log();
+        setTotal(res.data.data.length);
       })
       .catch((err) => {
         console.error(err);
@@ -173,7 +204,7 @@ export default function Siswa() {
       .finally(() => {
         setLoad(false);
       });
-  }, []);
+  }, [active]);
 
   return (
     <div>
@@ -261,7 +292,7 @@ export default function Siswa() {
             </thead>
             <tbody>
               {siswas &&
-                siswas.map((siswa, i) => (
+                siswas.slice(active, active+itemsPerPage).map((siswa, i) => (
                   <tr key={i}>
                     <td
                       className="border border-main_dark whitespace-nowrap px-3 sticky left-0 bg-white"
@@ -344,6 +375,12 @@ export default function Siswa() {
             </tbody>
           </table>
         )}
+      </div>
+
+      <div className="flex w-full justify-center items-center gap-4 px-4 py-2">
+        <button className="bg-white p-3 rounded-lg flex gap-2 cursor-pointer hover:bg-main_gray" onClick={prev}><ArrowLeft size={24} /> Prev</button>
+          <div className="p-2 bg-white rounded px-4 cursor-pointer">halaman ke-<span className="text-lg mr-2 bg-main_gray p-2 rounded">{page} </span> Dari {Math.ceil(total / itemsPerPage)}</div>
+        <button className="bg-white p-3 rounded-lg flex gap-2 cursor-pointer hover:bg-main_gray" onClick={next}>Next<ArrowRight size={24}/></button>
       </div>
 
       {showPopup && (
