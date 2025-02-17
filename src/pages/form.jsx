@@ -155,7 +155,7 @@ function Form() {
     <div className="bg-[#162c4d] min-h-screen">
       {load && (
         <div className="fixed z-30 top-0 left-0 flex justify-center items-center w-screen h-screen bg-[rgba(0,0,0,0.5)]">
-          <h1 className="text-white">Loading ...</h1>
+          <h1 className="text-black p-1 rounded-md shadow-md bg-white md:w-1/3 md:h-1/3 w-1/2 h-1/3 text-center flex items-center justify-center md:text-2xl text-md font-semibold">Tunggu sebentar, data anda sedang diproses</h1>
         </div>
       )}
       <div className="header p-5 relative">

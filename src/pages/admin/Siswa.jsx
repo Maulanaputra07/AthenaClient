@@ -14,6 +14,7 @@ import {
 import * as XLSX from "xlsx";
 import { Button, IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import GeneratePDF from "../../templates/GeneratePDF";
 
 export default function Siswa() {
   const beaxios = useAxios();
@@ -22,6 +23,7 @@ export default function Siswa() {
   const [errors, setErrors] = useState();
   const [showPopup, setShowPopup] = useState(false);
   const [detailSiswa, setDetailSiswa] = useState();
+  const [siswaPdf, setSiswaPdf] = useState();
   const [jurusans, setJurusans] = useState();
   const [active, setActive] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -136,7 +138,6 @@ export default function Siswa() {
   }
 
   function handleDeleteSiswa(e) {
-    console.log(e.target.value);
     Swal.fire({
       title: "Yakin Ingin Menghapus data siswa ini?",
       text: "data siswa yang hilang tidak bisa dikembalikan!",
@@ -168,6 +169,12 @@ export default function Siswa() {
           });
       }
     });
+  }
+
+  const handleDownloadPdf = (e) => {
+    beaxios.get(`/siswa/${e.target.value}`).then(res => setSiswaPdf(res.data.data)).catch(err => {
+
+    })
   }
 
   const exportFilteredDataByJurusan = () => {
@@ -274,6 +281,18 @@ export default function Siswa() {
       .finally(() => {
         setLoad(false);
       });
+
+      beaxios
+      .get(`/jurusans`)
+      .then((res) => {
+        setJurusans(res.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setLoad(false);
+      });
   }, [active]);
 
   return (
@@ -286,7 +305,7 @@ export default function Siswa() {
           <input
             type="text"
             className="border border-black text-black p-2 rounded"
-            placeholder="Search by name..."
+            placeholder="Search by NIK"
             onChange={handleSearch}
           />
           <button
@@ -435,13 +454,30 @@ export default function Siswa() {
                       >
                         Edit
                       </button>
-                      <button
+                      {!siswa.status ? (
+
+                        <button
                         onClick={handleDeleteSiswa}
                         className="bg-red p-2 m-1 rounded-md"
                         value={siswa.id}
-                      >
-                        Delete
+                        >
+                        Hapus
                       </button>
+                      
+                      ) : (
+                        <>
+                        
+                        {/* <button
+                        onClick={handleDownloadPdf}
+                        className="bg-gray p-2 m-1 rounded-md"
+                        value={siswa.id}
+                        >
+                        PDF
+                      </button> */}
+                            <GeneratePDF siswa={siswa} />
+                        </>
+                      )}
+
                     </td>
                   </tr>
                 ))}
