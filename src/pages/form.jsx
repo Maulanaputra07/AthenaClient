@@ -32,6 +32,13 @@ function Form() {
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
 
+  const today = new Date();
+  const year = today.getFullYear() - 14; // 14 tahun sebelum tahun ini
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const minDate = `${year}-${month}-${day}`;
+
+
   function handleChange(e) {
     setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
   }
@@ -126,17 +133,8 @@ function Form() {
     document.addEventListener("mousedown", handleClickOutside);
 
     const fetchData = async () => {
-      // let url =
-      //   "https://api-sekolah-indonesia.vercel.app/sekolah/smp?kab_kota=031800&page=1&perPage=30";
-
-      // if (search.trim()) {
-      //   url = `https://api-sekolah-indonesia.vercel.app/sekolah/s?sekolah=${search}`;
-      // }
 
       try {
-        // const res = await axios.get(url);
-        // setAsalSekolah(res.data.dataSekolah);
-
         beaxios.get("/jurusans").then((res) => {
           setJurusans(res.data.data);
           setDataSiswa({ ...dataSiswa, ["jurusan_id"]: res.data.data[0].id });
@@ -344,6 +342,7 @@ function Form() {
                         placeholder="Tanggal Lahir"
                         name="tanggal_lahir"
                         value={dataSiswa?.tanggal_lahir ?? ""}
+                        max={minDate}
                         onChange={handleChange}
                       />
                     </div>

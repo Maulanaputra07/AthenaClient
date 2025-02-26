@@ -4,6 +4,7 @@ import { AuthGuard } from "../../config/Guard";
 import { CardTable } from "../../components/CardTable";
 import { useAxios } from "../../config/hooks";
 import { Card } from "../../components/Card";
+// import "../../"
 
 export default function Home() {
   const axios = useAxios();

@@ -270,7 +270,7 @@ export default function Siswa() {
     // document.addEventListener("mousedown", handleClickOutside);
 
     beaxios
-      .get(`/siswa`)
+      .get(`/siswa?sort=desc`)
       .then((res) => {
         setSiswa(res.data.data);
         setTotal(res.data.data.length);

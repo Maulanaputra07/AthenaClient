@@ -5,7 +5,7 @@ import { AuthContext } from "./Provider";
 export const useAxios = () => {
   const token = localStorage.getItem("token");
   return axios.create({
-    baseURL: "http://localhost:8000/api",
+    baseURL: "http://103.174.115.6:8123/api",
     headers: { Authorization: "Bearer " + token },
   });
 };

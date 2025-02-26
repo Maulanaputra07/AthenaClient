@@ -29,6 +29,8 @@ function Login() {
       });
   }
 
+
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -65,6 +67,7 @@ function Login() {
                   name="username"
                   autoComplete="username"
                   placeholder="Username"
+                  onChange={() => setAlert(null)}
                 />
               </div>
             </div>
@@ -84,6 +87,7 @@ function Login() {
                   name="password"
                   autoComplete="current-password"
                   placeholder="Password"
+                  onChange={() => setAlert(null)}
                 />
               </div>
             </div>
