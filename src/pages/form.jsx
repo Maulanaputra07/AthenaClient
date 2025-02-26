@@ -42,6 +42,17 @@ function Form() {
   function handleChange(e) {
     setDataSiswa({ ...dataSiswa, [e.target.name]: e.target.value });
   }
+  
+  const handleSelect = (item) => {
+    console.log(item);
+    setSelectedSekolah(item);
+    setIsOpen(false);
+  }
+
+  const handleSearch = (e) => {
+    console.log(e.target.value);
+    setSerach(e.target.value);
+  }
 
   // const handleSelect = (item) => {
   //   setSelectedSekolah(item);
@@ -143,6 +154,45 @@ function Form() {
     };
 
     fetchData();
+
+
+    const fetchData = async () => {
+      let url = "https://api-sekolah-indonesia.vercel.app/sekolah/smp?kab_kota=031800&page=1&perPage=30"
+  
+      if(search){
+        url = `https://api-sekolah-indonesia.vercel.app/sekolah/s?sekolah=${search}`;
+      }else if(search == ""){
+        url = "https://api-sekolah-indonesia.vercel.app/sekolah/smp?kab_kota=031800&page=1&perPage=30"
+      }
+      
+      try{
+        const res = await axios.get(url)
+        setAsalSekolah(res.data.dataSekolah);
+
+        beaxios.get("/jurusans").then((res) => {
+            setJurusans(res.data.data);
+          });
+      } catch (err) {
+
+      }
+    };
+    
+    fetchData();    
+    // axios
+    //   .get(
+    //     url
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data.dataSekolah.sekolah);
+    //     setAsalSekolah(res.data.dataSekolah);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    // beaxios.get("/jurusans").then((res) => {
+    //   setJurusans(res.data.data);
+    // });
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -691,6 +741,7 @@ function Form() {
                         
                       {/* {isOpen && (
                       )} */}
+
                     </div>
                     {errors?.asal_sekolah && (
                       <span className="text-red">{errors?.asal_sekolah}</span>
