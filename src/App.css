@@ -9,3 +9,14 @@
   background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%) !important;
 }
 
+th.sticky,
+td.sticky {
+  /* background-color: white; */
+  border: 1px solid black; /* Pastikan border tetap terlihat */
+  z-index: 10; /* Supaya elemen sticky berada di atas */
+  box-shadow: 2px 120px 50px 20px rgba(0, 0, 0, 0.1); /* Tambahkan sedikit efek bayangan */
+}
+
+/* th.sticky{
+  
+} */

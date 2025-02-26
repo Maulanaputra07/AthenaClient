@@ -29,14 +29,25 @@ function Login() {
       });
   }
 
+
+
   useEffect(() => {
-    if (auth) {
+    const token = localStorage.getItem("token");
+    if (token) {
       return navigate("/admin");
     }
   }, []);
 
   return (
     <div className="max-w-full h-screen bg-white-yellow flex flex-col justify-center items-center">
+      <div className="login-logo flex items-center gap-2 absolute top-0 left-0 pt-1 ps-2">
+        <img src="/logosmkth.png" alt="a" className=" w-12 " />
+        <img
+          src="/athenalogo.png"
+          alt="a"
+          className="w-10 h-10"
+        />
+      </div>
       <div className="gap-5 flex flex-col w-full items-center justify-center">
         <div className="w-full max-w-xl bg-[#F1F1F1] rounded-md shadow-xl p-5">
           <h1 className="text-center mt-2 font-bold text-2xl">Login</h1>
@@ -56,6 +67,7 @@ function Login() {
                   name="username"
                   autoComplete="username"
                   placeholder="Username"
+                  onChange={() => setAlert(null)}
                 />
               </div>
             </div>
@@ -75,6 +87,7 @@ function Login() {
                   name="password"
                   autoComplete="current-password"
                   placeholder="Password"
+                  onChange={() => setAlert(null)}
                 />
               </div>
             </div>

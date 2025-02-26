@@ -14,10 +14,10 @@ export const AuthProvider = ({ children }) => {
         setUser(res.data.data);
       })
       .catch((err) => {
-        console.log(err)
-        setUser(null);
+        setUser(undefined);
         localStorage.removeItem("token");
-        return <Navigate to={"/"} />;
+        console.log(err);
+
       });
   }, []);
   return (

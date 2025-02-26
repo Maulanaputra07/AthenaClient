@@ -31,6 +31,7 @@ export default {
           DEFAULT: "#eab308",
           dark: "#ca8a04",
         },
+        gray: "gray",
         main_dark: "#2E4052",
         main_gray: "#F1f1f1",
         main_orange: "#FFAA17",
