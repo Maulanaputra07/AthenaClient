@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Sidebar, { SidebarItem } from "../../components/Sidebar";
+import Sidebar, { SidebarItem } from "../../components/sidebar";
 import "../../App.css";
 import {
   Outlet,
